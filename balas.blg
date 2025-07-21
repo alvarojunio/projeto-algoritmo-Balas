@@ -1,0 +1,65 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: balas.aux
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: balas-blx.bib
+Database file #2: bibliografia.bib
+Biblatex version: 3.18
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 3 entries,
+            6399 wiz_defined-function locations,
+            1220 strings with 9296 characters,
+and the built_in function-call counts, 12732 in all, are:
+= -- 830
+> -- 297
+< -- 79
++ -- 351
+- -- 110
+* -- 783
+:= -- 1480
+add.period$ -- 0
+call.type$ -- 3
+change.case$ -- 37
+chr.to.int$ -- 54
+cite$ -- 4
+duplicate$ -- 1308
+empty$ -- 1114
+format.name$ -- 116
+if$ -- 2634
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 0
+newline$ -- 78
+num.names$ -- 103
+pop$ -- 719
+preamble$ -- 1
+purify$ -- 46
+quote$ -- 0
+skip$ -- 473
+stack$ -- 0
+substring$ -- 1336
+swap$ -- 315
+text.length$ -- 72
+text.prefix$ -- 2
+top$ -- 1
+type$ -- 90
+warning$ -- 0
+while$ -- 214
+width$ -- 0
+write$ -- 76

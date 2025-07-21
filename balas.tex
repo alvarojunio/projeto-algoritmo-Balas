@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{url}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[
+maxbibnames=99,
+backend=bibtex,
+%style=alphabetic,
+sorting=ynt
+]{biblatex} %Imports biblatex package
+\addbibresource{bibliografia.bib}
+
+\title{Algoritmo de Balas aplicado ao TSP com janelas de tempo e carro elétrico}
+
+\begin{document}
+
+\maketitle
+
+%\section*{Identificação}
+
+\noindent{\bf Orientador}:  Álvaro Junio Pereira Franco - \url{alvaro.junio@ufsc.br}\\
+
+\noindent{\bf Estudante}: Felipe Lourenço da Silva - \url{felipe.lourenco@grad.ufsc.br}\\
+
+\noindent{\bf Departamento}: Informática e Estatística\\
+
+\noindent{\bf Centro de ensino:} Tecnológico\\
+
+\noindent{\bf Título do projeto:} Modelos e algoritmos para variações modernas do problema de roteamento de veículos\\
+
+\noindent{\bf Fonte financiadora:} Conselho Nacional de Desenvolvimento Científico e Tecnológico - Termo de Outorga - Processo: 405247/2023-0 (SIGPEX N. 202104940)
+
+\section*{Resumo}
+Adaptamos o algoritmo de Balas que resolve o TSP com janelas de tempo para resolver o TSP com janelas de tempo e carro elétrico.
+
+\section*{O algoritmo de Balas}
+O algoritmo de Balas foi apresentado no artigo \cite{Ba}. Uma implementação deste algoritmo foi apresentada em \cite{BS}. Vamos usar a mesma notação que aparece nos artigos citados. O grafo de entrada possui $n$ vértices e é completo. Denotamos as $n$ cidades por $N=\{1, 2, \dots, n\}$. Uma permutação $\pi$ de $1, 2, \dots, n$ é uma solução do TSP clássico. A posição da cidade $i$ em uma solução viável do problema é denotado por $\pi(i)$. O grafo possui custos nas arestas $t_{ij}$ que representam tanto a distância quanto o tempo entre os vértices $i$ e $j$. O algoritmo de Balas resolve o TSP com a seguinte restrição: dado um inteiro positivo $k$ e qualquer par de cidades $i$ e $j$, se $j \geq i + k$ então em qualquer solução viável do problema, a cidade $i$ deve preceder a cidade $j$, ou seja, $\pi(i) < \pi(j)$. O algoritmo consiste de uma redução do TSP restrito para o problema de encontrar um caminho de menor custo em um grafo dirigido acíclico.
+
+Existem propriedades importantes que valem destacar. A primeira delas determina as cidades candidatas a ocupar uma determinada posição em uma solução viável, $\pi^{-1}$. As cidades candidatas a ocupar a posição $i$ de uma solução viável são aquelas dentro do intervalo de inteiros $\{\max\{1, i - k + 1\}, \dots, \min\{i + k - 1, n\}\}$, ou seja, $$\max\{1, i-k+1\} \leq \pi^{-1}(i) \leq \min\{i+k-1,n\}.$$ Para qualquer cidade $j$, a posição de $j$ em uma solução viável também está definida dentro do seguinte intervalo de inteiros $\{\max\{1, j-k+1\}, \dots \min\{j + k -1,n\}\}$, ou seja, $$\max\{1, j-k+1\} \leq \pi(j) \leq \min\{i+k-1,n\}.$$ Portanto, a construção do grafo considera todas as possibilidades de candidatos para uma determinada posição $i$ e considera todas as posições que uma cidade $j$ pode ocupar.
+
+O grafo auxiliar $G^*$ pode ser divido em $n+1$ camadas. O conjunto de vértices da camada $i$ do grafo auxiliar é denotado por $V^*_i$. $V^*_1 = \{s\}$ (vértice fonte $s$). $V^*_{n+1} = \{t=s\}$ (vértice sorvedouro $t$ que é igual a fonte $s$). E $V^*_i \leq (k+1)2^{k-2}$ para $i=2, \dots, n$. O grau de entrada de cada vértice do grafo auxiliar é no máximo $k$.
+
+Em geral, a segunte recorrência calcula o custo de um segmento ótimo começando na cidade 1, passando pelas cidades de um subconjunto $W\subset N$ nas posições $2, \dots, i-1$ e visitando a cidade $j$ na posição $i$: $$C(W,i,j) = \min_{l\in W}\{W \backslash \{l\}, i-1, l\}.$$
+
+No TSP clássico, existem muitas possibilidades para um conjunto $W$ com $i-2$ elementos, a saber, $\binom {n}{i-2}$. No entanto, neste TSP restrito, as possibilidades para $W$ são poucas e descritas por pares de subconjuntos cujo tamanho de cada um é limitado por $k$. Os pares são:
+$$ S^-(\pi, i):= \{l \in (1, \dots, n): l \geq i, \pi(l) \leq i-1\}$$
+e
+$$ S^+(\pi, i):= \{h \in (1, \dots, n): h \leq i-1, \pi(h) \geq i\}.$$
+
+Colocado de outra forma, $S^-(\pi, i)$ é o conjunto de cidades que possuem índices maiores ou iguais a $i$ e que foram visitadas em alguma posição $1, \dots, i-1$, enquanto que $S^+(\pi,i)$ é o conjunto de cidades que possuem índices menores ou iguais a $i-1$ e serão visitadas em alguma posição $i, \dots, n$. É demonstrado que $|S^-(\pi, i)| = |S^+(\pi, i)| \leq \lfloor k/2 \rfloor$.
+
+Um caminho de custo mínimo no grafo auxiliar passará por um vértice em cada camada. O vértice deste caminho na camada $i$ contém a cidade que é visitada na posição $i$ da solução ótima. Um vértice na camada $i$ do grafo auxiliar é denotado por $(i, j, S^-_{ij}, S^+_{ij})$ sendo $j$ uma cidade candidata à posição $i$, e $S^-_{ij}$ e $S^+_{ij}$ sendo, respectivamente, $S^-(\pi, i)$ e $S^+(\pi, i)$.
+
+O tempo de execução para resolver o problema do caminho mínimo no grafo auxiliar construído previamente é $O(k^22^{k-2}n)$.
+
+\medskip
+\printbibliography
+
+\end{document}

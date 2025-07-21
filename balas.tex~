@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{url}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[
+maxbibnames=99,
+backend=bibtex,
+%style=alphabetic,
+sorting=ynt
+]{biblatex} %Imports biblatex package
+\addbibresource{bibliografia.bib}
+
+\title{Modelos e algoritmos para variações modernas do problema de roteamento de veículos\\{\large Um método {\it Branch \& Bound} para o problema do caixeiro viajante com janelas de tempo e veículo elétrico}}
+
+
+
+\begin{document}
+
+\maketitle
+
+%\section*{Identificação}
+
+\noindent{\bf Orientador}:  Álvaro Junio Pereira Franco - \url{alvaro.junio@ufsc.br}\\
+
+\noindent{\bf Coorientador}: Pedro Belin Castellucci - \url{pedro.castellucci@ufsc.br}\\
+
+\noindent{\bf Departamento}: Informática e Estatística\\
+
+\noindent{\bf Centro de ensino:} Tecnológico\\
+
+\noindent{\bf Título do projeto:} Modelos e algoritmos para variações modernas do problema de roteamento de veículos\\
+
+\noindent{\bf Fonte financiadora:} Conselho Nacional de Desenvolvimento Científico e Tecnológico - Termo de Outorga - Processo: 405247/2023-0 (SIGPEX N. 202104940)
+
+\section*{Resumo}
+Esta proposta de IC está conectada com a proposta de IC do ciclo 2024-2025. O problema do caixeiro viajante ou {\it Traveling Salesman Problem} (TSP) é um problema clássico da Computação. O problema é NP-difícil, possui algoritmos exatos e soluções através de heurísticas. Uma variante do problema ocorre quando o caixeiro viajante precisa atender cada cliente em um tempo pré-determinado. Neste caso, temos o problema do caixeiro viajante com janelas de tempo (TSPTW). O problema continua NP-difícil com soluções exatas e heurísticas encontradas na literatura. Nos últimos anos, uma nova variante do problema foi apresentada: \emph{além de atender as restrições de janela de tempo, o caixeiro viajante está em um carro elétrico} (E-TSPTW). Neste caso, a descarga e carga da bateria do carro devem ser consideradas. Mais uma vez, o problema continua NP-difícil e as soluções exatas e heurísticas passam a ser mais escassas na literatura. No ciclo 2024-2025, foi desenvolvido um algoritmo exato para este problema. O algoritmo baseai-se no algoritmo de Balas para o TSPTW, adaptando-o para atender ao E-TSPTW. A atual proposta tem como objetivo contribuir com mais um algoritmo exato para o E-TSPTW, analisar o tempo de execução do algoritmo, analisar o espaço consumido, aplicar o algoritmo desenvolvido para instâncias do problema e analisar os resultados obtidos.
+
+\section*{Introdução - Contextualização e motivação}
+
+Uma questão tratada neste trabalho é o caso de empresas que precisam visitar clientes para apresentar, entregar ou fazer a divulgação de algum produto. Como as empresas pensam em minimizar os custos envolvidos neste processo, o ideal é que um funcionário da empresa visite cada um de seus clientes exatamente uma única vez para a prestação do correspondente serviço. Este problema é clássico em Computação e é chamado de o \emph{problema do caixeiro viajante}. O problema do caixeiro viajante pode ser declarado da seguinte forma. Um caixeiro viajante precisa visitar os seus clientes e voltar para a sua casa. Cada cliente deve ser visitado exatamente uma vez. Entre quaisquer dois clientes $i$ e $j$ existe um tempo do trajeto entre $i$ e $j$. O caixeiro viajante quer realizar a sua visita aos clientes e voltar para a sua casa o mais rápido possível. De maneira formal temos o seguinte. São dados um grafo completo $G$ com o conjunto de vértices denotado por $V$, $|V|=n$; e uma função $t$ de $V\times V$ para $\mathbb{R}_+$. O objetivo é encontrar um ciclo $C$ com $n$ vértices de tal forma que a soma $\sum_{e \in C}t(e)$ seja mínima. Alguns livros de introdução aos algoritmos como \cite{CLRS} e \cite{DPV} apresentam a dificuldade do problema, alguns algoritmos exatos para o problema e a análise do tempo de execução dos algoritmos.
+
+Na vida real, é comum que os clientes a serem visitados por alguma empresa tenham agendas limitadas. Então, os clientes disponibilizam uma faixa de horário para que as empresas os visitem. Neste caso, estamos tratando do \emph{problema do caixeiro viajante com janelas de tempo} (TSPTW). Neste problema, o caixeiro viajante precisa chegar a cada cliente dentro de um intervalo (ou janela) de tempo. Neste caso, são dados um grafo completo $G$ com o conjunto de vértices $V$ com $n$ vértices; uma função $t$ de $V \times V$ para $\mathbb{R}_+$; e uma função $f$ de $V$ para $\mathbb{Z}_+ \times \mathbb{Z}_+$ sendo que para cada elemento $(p,q)$ da imagem temos $p \leq q$. O objetivo é encontrar um ciclo $C=(v_1, \dots, v_n)$ de $G$ com $n$ vértices cuja soma das arestas é minima e para cada $v_{i} \in C$ temos que $\sum_{j=1}^{i-1}t(v_j,v_{j+1}) \in f(v_i)$, isto é, o resultado da soma pertença ao intervalo de tempo definido por $f(v_i)$. Alguns exemplos de métodos exatos que resolvem este problema foram propostos por \cite{CMT} e \cite{B} (métodos de {\it Branch \& Bound}) e \cite{DDGS} (uma programação dinâmica). Outro trabalho importante para o problema foi desenvolvido por Balas \cite{EB}. 
+
+Hoje em dia, os carros elétricos são mais comuns na sociedade. Várias montadoras de carros estão investindo em projetos e na produção de carros com energia mais limpa e sem a utilização de combustível fóssil. Com isso, esperam-se contribuir com a diminuição de emissão de dióxido de carbono e outros gases poluentes que contribuem para o aquecimento do planeta. No contexto deste trabalho, é importante destacar a \emph{bateria} dos carros elétricos e que a carga e descarga da bateria deve ser considerada pelas empresas que pretendem visitar os seus clientes com um carro elétrico.  Dessa forma, temos o \emph{problema do caixeiro viajante com janelas de tempo e carro elétrico} (E-TSPTW) \cite{RW}. Neste problema, o caixeiro viajante precisa visitar todos os seus clientes exatamente uma vez em um carro elétrico. Portanto, ele deve considerar a descarga da bateria do carro e a recarga em estações específicas para isso. Neste problema, são dados um grafo $G$ cujo conjunto de vértices é igual a união de dois outros $C$ (clientes) e $S$ (estações); uma função $t$ de $(C \cup S) \times (C \cup S)$ para $\mathbb{R}_+$; uma função $f$ de $C$ para $\mathbb{Z}_+ \times \mathbb{Z}_+$ sendo que para cada elemento $(p,q)$ da imagem temos $p \leq q$; e um carro elétrico cuja autonomia é $b$. Ao visitar um cliente ou uma estação, a bateria do carro deve estar sempre positiva. Ao percorrer uma aresta $e$ cujo tempo é $t(e)$, a bateria descarrega a uma taxa $h$ e proporcionalmente linear a $t(e)$. Com isso, é possível encontrar o quanto uma bateria descarrega ao percorrer uma aresta $e$, isto é, $d(e)=ht(e)$. O objetivo é encontrar um passeio $P=(v_1, \dots, v_m)$ em $G$ de tal forma que todos os vértices de $C$ são visitados uma única vez; a soma das arestas de $P$ é minima; para cada $v_{i} \in C$ temos que $\sum_{j=1}^{i-1}t(v_j,v_{j+1}) \in f(v_i)$; e a bateria do carro está sempre positiva em qualquer vértice do passeio.  Neste projeto trabalharemos com o fato de que a bateria do carro é carregada completamente quando ele para em uma estação de recarga. Portanto, se o carro elétrico parou em $k$ estações de recarga durante o passeio $P$, então temos que $kb - \sum_{e\in P}d(e) > 0$. Isso implica que $k >  \frac{\sum_{e\in P}d(e)}{b}$. Para simplificar, o tempo de atendimento de cada cliente e o tempo gasto nas estações de recarga não são considerados.
+
+Baseado no algoritmo apresentado por Balas \cite{EB}, um algoritmo para o E-TSPTW foi desenvolvido durante o ciclo 2024-2025. O algoritmo de Balas reduz o E-TSPTW para o problema de encontrar um caminho de custo mínimo em um grafo acíclico. Os vértices deste grafo são dispostos em $n$ camadas. A adaptação para o E-TSPTW foi dar ao caixeiro viajante a opção de passar por um posto de recarga a cada par de camadas consecutivas.
+
+A proposta para o ciclo 2025-2026 é continuar desenvolvendo algoritmos exatos para o E-TSPTW concentrando no desenvolvimento de um método {\it Branch \& Bound} para o problema.
+
+Este texto está estruturado da seguinte forma. Acabamos de apresentar uma introdução com contextualização e motivação para o desenvolvimento do trabalho. Nas próximas seções, apresentamos os objetivos deste trabalho, a metodologia que será aplicada para o desenvolvimento do trabalho, apresentamos quais são os resultados esperados e comentamos sobre a viabilidade de execução do trabalho.
+
+
+\section*{Objetivos}
+
+O  objetivo principal deste trabalho é desenvolver uma nova solução para o E-TSPTW através do método {\it Branch \& Bound}. Para alcançarmos este objetivo principal precisamos estudar o método de {\it Branch \& Bound}; estudar o problema TSP; estudar o problem TSPTW; estudar o E-TSPTW e implementar heurísticas para o último problema; desenvolver e implementar uma solução para o problema com carro elétrico através do método citado; analisar o tempo e o espaço consumido pela solução desenvolvida (complexidade teórica de tempo e espaço); implementar a solução desenvolvida e aplicar sobre as instâncias conhecidas na literatura; analisar os resultados obtidos; e escrever relatórios parciais e final. Em seguida, discutimos a metodologia que será aplicada para alcaçar os objetivos deste trabalho.
+
+
+\section*{Metodologia}
+Inicialmente, indicaremos a leitura sobre o problema do caixeiro viajante, suas variantes e problemas semelhantes. Um problema semelhante ao problema do caixeiro viajante é o do \emph{ciclo hamiltoniano em grafos} \cite{BM}. Serão realizadas revisões da literatura relacionada aos métodos de \emph{Branch \& Bound} \cite{W}.  As metas da revisão da literatura são: \textit{(i)} familiarizar com o método de solução de problemas de otimização; e \textit{(ii)} identificar uma relação entre os método citado e os métodos do estado-da-arte para soluções do problema do caixeiro viajante e suas variantes. 
+
+Apoiada na revisão da literatura, será desenvolvida uma modelagem do problema do caixeiro viajante com janelas de tempo e carro elétrico. O modelo usará o método de \emph{Branch \& Bound}. O processo consiste em adaptar, estender e elaborar um conjunto de decisões a serem tomadas seguindo todas as restrições operacionais dos problemas e otimizando uma função objetivo, que depende de uma medida que queremos otimizar. Trabalharemos com instâncias do problema conhecidas na literatura \cite{RW}.
+
+A análise do consumo de tempo e espaço (complexidade de tempo e espaço) é muito importante para termos uma ideia do tempo de execução do método quando executado em uma máquina e em função do tamanho da entrada. Por se tratar de um problema NP-difícil, a complexidade de tempo será exponencial, a menos que P seja igual a NP \cite{GJ}. Mas ainda assim, podemos comparar as complexidades obtidas com aquelas obtidas por métodos exatos para o problema.
+
+Para se obter soluções a partir de instâncias do problema, podem ser utilizados pacotes computacionais baseados em métodos de \textit{Branch \& Bound} como por exemplo \cite{gurobi} e \cite{BestuzhevaEtal2021OO}. Como o problema tratado é NP-difícil \cite{cormen09}, a aplicação direta de tais pacotes fornece soluções interessantes apenas para instâncias pequenas, sem interesse prático. Por isso, será importante pensar em estratégias que diminuam o espaço de busca do problema, como o pré-processamento. Uma fase de pré-processamento pode ser muito importante para qualquer método exato. Por isso, levaremos em consideração a estrutura do problema e das instâncias a serem resolvidas.
+
+\paragraph{Uma proposta baseada em um método {\it Branch \& Bound} para o TSP.}
+Em geral, o método {\it Branch \& Bound} relaxa o problema original de tal forma que o problema relaxado possa ser resolvido rapidamente. Caso a solução do problema relaxado seja uma solução para o problema original, então o método termina com a solução ótima. Caso contrário, alguma restrição do problema original é violada e portanto, ela deve ser corrigida. Já é conhecido na literatura uma relaxação para o TSP. A ideia neste trabalho é aplicar está relaxação ao problema E-TSPTW. Portanto, a proposta é relaxar a restrição que exige que o caixeiro viajante saia uma única vez de cada cliente (grau de saída nos vértices clientes igual a 1). Dessa forma, dentro do contexto do TSP elétrico, entre dois postos de abastecimento da bateria, é possível obter soluções estruturadas como uma árvore ao invés de um caminho. Veja um exemplo na Figura \ref{fig}. O vértice preenchido é o vértice \emph{origem}, de onde sai (e deve retornar) o caixeiro viajante. Note que na solução do problema relaxado (à direita na figura) o grau de saída do vértice de origem, por exemplo, é maior que 1. Portanto, isso deve ser corrigido forçando que o seu grau de saída seja 1. Como não conhecemos a solução ótima, não sabemos para qual vértice deve-se ir, saíndo da origem. Logo, precisamos verificar todas as possibilidades. Dessa forma, são criados $n-1$ novos subproblemas ({\it branch}). Para diminuir o espaço de busca, utilizaremos alguns limitantes ({\it bound}). Um deles foi apresentado na introdução: $k$, o número de estações de recarga que o caixeiro viajante precisa necessariamente passar. As próximas soluções ainda poderão ter uma estrutura de árvore mas o vértice de origem terá grau de saída igual a 1. Para cada novo subproblema, repete-se o processo sobre a solução apresentada considerando o grau de saída de cada vértice. O presente trabalho de iniciação científica investigará o desempenho desta proposta quando aplicada ao E-TSPTW.
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=.6]{relaxa.eps}
+  \caption{À esquerda temos uma solução viável do problema. À direita temos uma solução do problema relaxado.}
+  \label{fig}
+\end{center}
+\end{figure}
+
+Os resultados serão analisados e comparados com os obtidos na literatura. Como trabalharemos com um método exato, as soluções encontradas por este método serão ótimas. Na literatura encontramos soluções viáveis para algumas instâncias e obtidas por alguma heurística. Neste sentido, esperamos contribuir com a qualidade das soluções de algumas instâncias. %  Portanto, é necessária a construção de métodos de solução específicos. Tais métodos podem ser classificados como: \textit{(i)} métodos exatos, \textit{(ii)} métodos heurísticos ou \textit{(iii)} métodos aproximativos. A escolha do método é dependente da revisão da literatura, dos resultados obtidos com os experimentos e com o modelo de atividades anteriores. Além disso, podem ser construídos um ou mais métodos de diferentes classes. A meta dessa etapa é desenvolver pelo menos um método de solução eficiente (tempo computacional e qualidade de solução) para as instâncias de interesse prático. A eficiência dos métodos será avaliada comparando o desempenho dos métodos desenvolvidos e a dos modelos mencionados anteriormente.
+
+
+\section*{Resultados esperados}
+Esperamos contribuir com um algoritmo exato para o problema do caixeiro viajante com janelas de tempo e carro elétrico, contribuir com uma análise do consumo de tempo e espaço do algoritmo desenvolvido, contribuir com soluções ótimas para instâncias do problema que não se conhece uma solução ótima. No fim deste trabalho, um resultado esperado é uma publicação dos resultados obtidos nos anais de uma conferência nacional. Outro resultado esperado está no fortalecimento do relatório final deste projeto que deverá ser entregue à comissão de avaliação de projetos com financiamento do CNPq.
+
+\section*{Exequibilidade}
+Os proponentes (orientador e coorientador) deste trabalho são especialistas em análise e projeto de algoritmos. As suas experiências nesta área podem ser comprovadas através de suas publicações em revistas e conferências de qualidade. Os proponentes deste projeto orientam atualmente estudantes no PIBIC e em trabalhos de conclusão de curso. O coorientador é colaborador no Programa de Pós-graduação em Ciência da Computação da UFSC. Já orietaram e coorientaram outros estudantes de nível de graduação e pós-graduação. Isso indica que há alguns estudantes que podem se interessar pelo assunto e poderiam contribuir para essa proposta. Todos os trabalhos envolvem os seguintes assuntos: algoritmos, grafos, modelagem e progamação matemática. Todos esses assuntos estão presentes nesta proposta. Além disso, alguns estudantes da UFSC veem durante a graduação, disciplinas que ajudam no bom desenvolvimento desta proposta. Essas disciplinas possuem o foco em programação, algoritmos, grafos e modelagem. É também importante dizer que, caso esta proposta seja selecionada no programa PIBIC, tanto os proponentes quanto o/a bolsista da proposta, irão se encontrar toda semana para discussão e aplicação das técnicas estudadas. Além disso, o/a bolsista terá acesso ao laboratório do Grupo de Inteligência Artificial e Algoritmos \url{https://giaa.ufsc.br/}, uma sala localizada no segundo andar do prédio do Departamento de Informática e Estatística. Este laboratório possui máquinas que poderão ser utilizadas pelo/a bolsista durante o período da pesquisa.
+
+\medskip
+\printbibliography
+
+\end{document}

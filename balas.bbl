@@ -1,0 +1,80 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{ynt/global//global/global}
+  \entry{Ba}{article}{}
+    \name{author}{1}{}{%
+      {{hash=BE}{%
+         family={Balas},
+         familyi={B\bibinitperiod},
+         given={Egon},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{BE1}
+    \strng{fullhash}{BE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{1}
+    \field{sortinithash}{1}
+    \field{number}{0}
+    \field{pages}{529\bibrangedash 558}
+    \field{title}{New classes of efficiently solvable generalized traveling
+  salesman problems}
+    \field{volume}{86}
+    \field{journaltitle}{Annals of Operations Research}
+    \field{year}{1999}
+  \endentry
+
+  \entry{BS}{article}{}
+    \name{author}{2}{}{%
+      {{hash=BE}{%
+         family={Balas},
+         familyi={B\bibinitperiod},
+         given={Egon},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=SN}{%
+         family={Simonetti},
+         familyi={S\bibinitperiod},
+         given={Neil},
+         giveni={N\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {INFORMS}%
+    }
+    \strng{namehash}{BESN1}
+    \strng{fullhash}{BESN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{2}
+    \field{sortinithash}{2}
+    \field{number}{1}
+    \field{pages}{56\bibrangedash 75}
+    \field{title}{Linear time dynamic-programming algorithms for new classes of
+  restricted TSPs: A computational study}
+    \field{volume}{13}
+    \field{journaltitle}{INFORMS journal on Computing}
+    \field{year}{2001}
+  \endentry
+\enddatalist
+\endinput
