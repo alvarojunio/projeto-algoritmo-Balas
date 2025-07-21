@@ -1,0 +1,6 @@
+all:
+	latex pibic.tex
+	bibtex pibic.aux
+	bibtex pibic.aux
+	latex pibic.tex
+	dvipdf pibic.dvi
