@@ -38,7 +38,7 @@ sorting=ynt
 Adaptamos o algoritmo de Balas que resolve o TSP com janelas de tempo para resolver o TSP com janelas de tempo e carro elétrico.
 
 \section*{O algoritmo de Balas}
-O algoritmo de Balas foi apresentado no artigo \cite{Ba}. Uma implementação deste algoritmo foi apresentada em \cite{BS}. Vamos usar a mesma notação que aparece nos artigos citados. O grafo de entrada possui $n$ vértices e é completo. As $n$ cidades são indexadas por $1, 2, \dots, n$. Muitas vezes escrevemos $i$ como o índice da cidade $i$. Uma permutação $\pi$ de $1, 2, \dots, n$ é uma solução do TSP clássico. A posição da cidade $i$ em uma solução viável do problema é denotado por $\pi(i)$. O grafo possui custos nas arestas $t_{ij}$ que representam tanto a distância quanto o tempo entre os vértices $i$ e $j$. O algoritmo de Balas resolve o TSP com a seguinte restrição: dado um inteiro positivo $k$ e qualquer par de cidades $i$ e $j$, se $j \geq i + k$ então em qualquer solução viável do problema, a cidade $i$ deve preceder a cidade $j$, ou seja, $\pi(i) < \pi(j)$. A este problema, vamos nos referir como TSP restrito. O algoritmo consiste de uma redução do TSP restrito para o problema de encontrar um caminho de menor custo em um grafo dirigido acíclico.
+O algoritmo de Balas foi apresentado no artigo \cite{Ba}. Uma implementação deste algoritmo foi apresentada em \cite{BS}. Vamos usar a mesma notação que aparece nos artigos citados. O grafo de entrada possui $n$ vértices e é completo. As $n$ cidades são indexadas por índices em $N=\{1, 2, \dots, n\}$. Muitas vezes escrevemos $i$ como o índice da cidade $i$. Uma permutação $\pi$ de $1, 2, \dots, n$ é uma solução do TSP clássico. A posição da cidade $i$ em uma solução viável do problema é denotado por $\pi(i)$. O grafo possui custos nas arestas $t_{ij}$ que representam tanto a distância quanto o tempo entre os vértices $i$ e $j$. O algoritmo de Balas resolve o TSP com a seguinte restrição: dado um inteiro positivo $k$ e qualquer par de cidades $i$ e $j$, se $j \geq i + k$ então em qualquer solução viável do problema, a cidade $i$ deve preceder a cidade $j$, ou seja, $\pi(i) < \pi(j)$. A este problema, vamos nos referir como TSP restrito. O algoritmo consiste de uma redução do TSP restrito para o problema de encontrar um caminho de menor custo em um grafo dirigido acíclico.
 
 Existem propriedades importantes que valem destacar. A primeira delas determina as cidades candidatas a ocupar uma determinada posição em uma solução viável, $\pi^{-1}$. As cidades candidatas a ocupar a posição $i$ de uma solução viável são aquelas dentro do intervalo de inteiros $\{\max\{1, i - k + 1\}, \dots, \min\{i + k - 1, n\}\}$. Podemos então escrever que uma cidade candidata $\pi^{-1}(i)$ atende a seguinte restrição $$\max\{1, i-k+1\} \leq \pi^{-1}(i) \leq \min\{i+k-1,n\}.$$ Para qualquer cidade $j$, a posição de $j$ em uma solução viável também está definida dentro do seguinte intervalo de inteiros $\{\max\{1, j-k+1\}, \dots \min\{j + k -1,n\}\}$, ou seja, $$\max\{1, j-k+1\} \leq \pi(j) \leq \min\{j+k-1,n\}.$$ Portanto, dada a ($i-1$)-ésima visita do caixeiro viajante a algum vértice do grafo, o próximo vértice $j$ a ser visitado poderá ser obtido através da construção de um grafo auxiliar considerando todas as possibilidades de vértices candidatos para a posição $i$ (ou seja, $\pi^{-1}(i) = \max\{1, i-k+1\}, \dots, \min\{i+k-1,n\}$) e considerando todas as posições que uma cidade $j$ pode ocupar (ou seja, $\pi(j) = \max\{1, j-k+1\}, \dots, \min\{j+k-1,n\}$). Caso alguma cidade candidata $j$ para a posição $i$ não esteja dentro do intervalo descrito acima, então essa cidade não deve ser considerada. 
 
@@ -67,10 +67,21 @@ Um caminho de custo mínimo no grafo auxiliar passará por um vértice em cada c
 
 Para finalizar, o custo de um arco entre os vértices $(i-1, l, S^-_{i-1, l}, S^+_{i-1, l})$ e $(i, j, S^-_{ij}, S^+_{ij})$ em $G^*$ é o custo do arco entre os vértices $l$ e $j$ de $G$ ($c_{lj}$).
 
-Com isso, finalizamos a descrição do algoritmo de Balas para o TSP restrito. No entanto, Balas adaptou o algoritmo para o caso onde a restrição de que $i$ preceda a cidade $j$ em uma solução viável sempre que $j \geq i + k(i)$. Ou seja, cada vértice $i$ pode ter um $k$ diferente. Em seguida vamos descrever o algoritmos de Balas restrito e generalizado para este caso.
+O tempo de execução para resolver o problema do caminho mínimo no grafo auxiliar construído para o problema do TSP restrito é $O(k^22^{k-2}n)$. Ou seja, o problema está é tratável quando o parâmetro $k$ é fixo e pequeno (FPT - \textit{Fixed Parameter Tractable}).
+
+Com isso, finalizamos a descrição do algoritmo de Balas para o TSP restrito. No entanto, Balas generalizou o algoritmo para o caso onde a restrição de que $i$ preceda a cidade $j$ em uma solução viável sempre que $j \geq i + k(i)$. Ou seja, cada vértice $i$ pode ter um $k$ diferente. Em seguida vamos descrever o algoritmos de Balas restrito e generalizado para este caso.
+
+Para que uma posição de uma cidade $j$ seja igual a $i$ em uma solução viável ($\pi(j)=i$), $i$ precisa estar no seguinte intervalo $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$, sendo $P_j = \{l \in N: l < j$ e $l + k(l) \geq j + 1\}$.
+
+Vamos acompanhar de perto a demonstração de Bala para as desigualdades acima. Primeiro note que se $i \geq j$, então $\max \{1, j - |P_j|\} \leq i$ é satisfeita. Se $i \leq j$, então $i \leq \min\{n, j + k(j) - 1\}$ é satisfeita. É necessário mostrar que a primeira inequação é válida quando $i < j$ e a segunda inequação é válida quando $i > j$.
+
+Quando $i > j$, pelo princípio da casa dos pombos, é fato que teremos algum valor entre 1 e $i-1$ sendo a posição de alguma cidade $l > i$. Logo, $\pi(j) > \pi(l)$ e assim
+$$ i < l < j + k(j) - 1,$$ sendo que a segunda desigualdade vale pois precisamos atender ao TSP restrito generalizado onde temos se $\pi(l) \leq \pi(j)$ então $l \leq j + k(j) - 1$.
+
+Quando $i < j$, então teremos $\pi(l) > \pi(j)$ para $j-i$ cidades $l$ tais que $l < j$. No entanto, $\pi(l) > \pi(j)$ implica que $j \leq l + k(l) -1$, e assim o conjunto de cidades $l < j$ tal que $\pi(l) > \pi(j)$ é exatamente $P_j$. Portanto, $|P_j| \geq j-i$ or $i \geq j - |P_j|$.
 
 
-O tempo de execução para resolver o problema do caminho mínimo no grafo auxiliar construído previamente é $O(k^22^{k-2}n)$.
+
 
 \medskip
 \printbibliography
