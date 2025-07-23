@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel}
 \usepackage{graphicx} % Required for inserting images
-\usepackage{url}
+\usepackage{url,psfrag}
 \usepackage{csquotes}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -71,16 +71,50 @@ O tempo de execução para resolver o problema do caminho mínimo no grafo auxil
 
 Com isso, finalizamos a descrição do algoritmo de Balas para o TSP restrito. No entanto, Balas generalizou o algoritmo para o caso onde a restrição de que $i$ preceda a cidade $j$ em uma solução viável sempre que $j \geq i + k(i)$. Ou seja, cada vértice $i$ pode ter um $k$ diferente. Em seguida vamos descrever o algoritmos de Balas restrito e generalizado para este caso.
 
-Para que uma posição de uma cidade $j$ seja igual a $i$ em uma solução viável ($\pi(j)=i$), $i$ precisa estar no seguinte intervalo $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$, sendo $P_j = \{l \in N: l < j$ e $l + k(l) \geq j + 1\}$.
+Para que uma posição de uma cidade $j$ seja igual a $i$ em uma solução viável ($\pi(j)=i$), é necessário e suficiente que $i$ esteja no seguinte intervalo $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$, sendo $P_j = \{l \in N: l < j$ e $l + k(l) \geq j + 1\}$.
 
-Vamos acompanhar de perto a demonstração de Bala para as desigualdades acima. Primeiro note que se $i \geq j$, então $\max \{1, j - |P_j|\} \leq i$ é satisfeita. Se $i \leq j$, então $i \leq \min\{n, j + k(j) - 1\}$ é satisfeita. É necessário mostrar que a primeira inequação é válida quando $i < j$ e a segunda inequação é válida quando $i > j$.
+Vamos acompanhar de perto a demonstração de Bala para as desigualdades acima.
+
+\paragraph{Necessidade.} Primeiro note que se $i \geq j$, então $\max \{1, j - |P_j|\} \leq i$ é satisfeita. Se $i \leq j$, então $i \leq \min\{n, j + k(j) - 1\}$ é satisfeita. Logo, falta mostrar que a primeira inequação é válida quando $i < j$ e a segunda inequação é válida quando $i > j$.
 
 Quando $i > j$, pelo princípio da casa dos pombos, é fato que teremos algum valor entre 1 e $i-1$ sendo a posição de alguma cidade $l > i$. Logo, $\pi(j) > \pi(l)$ e assim
 $$ i < l < j + k(j) - 1,$$ sendo que a segunda desigualdade vale pois precisamos atender ao TSP restrito generalizado onde temos se $\pi(l) \leq \pi(j)$ então $l \leq j + k(j) - 1$.
 
-Quando $i < j$, então teremos $\pi(l) > \pi(j)$ para $j-i$ cidades $l$ tais que $l < j$. No entanto, $\pi(l) > \pi(j)$ implica que $j \leq l + k(l) -1$, e assim o conjunto de cidades $l < j$ tal que $\pi(l) > \pi(j)$ é exatamente $P_j$. Portanto, $|P_j| \geq j-i$ or $i \geq j - |P_j|$.
+Quando $i < j$, então teremos $\pi(l) > \pi(j)$ para $j-i$ cidades $l$ tais que $l < j$. Vamos ver o porquê. As cidades de $N_{j-1}$ podem ocupar até $i-1$ posições $k$ tal que $\pi(k) < \pi(j)$. As outras cidades de $N_{j-1}$, ou seja $j-1-(i-1)=j-i$ cidades, ocupam posições depois de $i$. Dessa forma, para uma cidade $l$ dentre essa $j-i$ cidades, temos $\pi(l) > \pi(j)$ como queríamos mostrar. Mas, $\pi(l) > \pi(j)$ implica que $j \leq l + k(l) -1$ (TSP restrito). Assim, o conjunto de cidades $l < j$ tal que $\pi(l) > \pi(j)$ é exatamente $P_j$. Portanto, $|P_j| \geq j-i$ ou $i \geq j - |P_j|$.
 
+\paragraph{Suficiência.} Considere que para algum $i$ e $j$ vale que $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$. A demonstração segue construindo soluções viáveis do TSP restrito e generalizado com $\pi(j)=i$. Se $i=j$, então $\pi(j)=j$ para todo $j \in N$ é uma solução viável.
 
+Se $i > j$, então uma solução viável é a seguinte $\pi(l) = l$ para $l = 1, 2, \dots, j-1$ e $l= i+1, i+2, \dots, n$, $\pi(j) = i$ e $\pi(l) = l-1$ para $l = j+1, j+2, \dots, i$. Veja um exemplo na Figura \ref{fig1}.
+
+\begin{figure}
+  \centering
+  \psfrag{1}{\tiny 1}
+  \psfrag{2}{\tiny 2}
+  \psfrag{3}{\tiny 3}
+  \psfrag{4}{\tiny 4}
+  \psfrag{5}{\tiny 5}
+  \psfrag{6}{\tiny 6}
+  \psfrag{7}{\tiny 7}
+  \psfrag{8}{\tiny 8}
+  \psfrag{5i}{\bf \tiny 5}
+  \psfrag{6i}{\bf \tiny 6}
+  \psfrag{7i}{\bf \tiny 7}
+  \psfrag{8i}{\bf \tiny 8}
+  \psfrag{9}{\tiny 9}
+  \psfrag{10}{\tiny 10}
+  \psfrag{11}{\tiny 11}
+  \psfrag{12}{\tiny 12}
+  \psfrag{13}{\tiny 13}
+  \psfrag{j}{\tiny $j$}
+  \psfrag{i}{\tiny $i$}
+  \psfrag{N}{$N$}
+  \psfrag{pi}{$\pi$}
+  \includegraphics[scale=.5]{fig1.eps}
+  \caption{Caso com $i = 8$ e $j = 5$.}
+  \label{fig1}
+\end{figure}
+
+Se $i < j$, então
 
 
 \medskip
