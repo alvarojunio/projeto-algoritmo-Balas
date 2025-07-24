@@ -18,6 +18,9 @@ Subir atualizações:
 Adicionar novos arquivos:
 - $ git add < new - file >
 
+Para atualizar arquivos locais:
+- $ git pull origin main
+
 ***
 No terminal, digitar:
 - $ ssh-keygen -C test
