@@ -40,7 +40,7 @@ Adaptamos o algoritmo de Balas que resolve o TSP com janelas de tempo para resol
 \section*{O algoritmo de Balas}
 O algoritmo de Balas foi apresentado no artigo \cite{Ba}. Uma implementação deste algoritmo foi apresentada em \cite{BS}. Vamos usar a mesma notação que aparece nos artigos citados. O grafo de entrada possui $n$ vértices e é completo. As $n$ cidades são indexadas por índices em $N=\{1, 2, \dots, n\}$. Muitas vezes escrevemos $i$ como o índice da cidade $i$. Uma permutação $\pi$ de $1, 2, \dots, n$ é uma solução do TSP clássico. A posição da cidade $i$ em uma solução viável do problema é denotado por $\pi(i)$. O grafo possui custos nas arestas $t_{ij}$ que representam tanto a distância quanto o tempo entre os vértices $i$ e $j$. O algoritmo de Balas resolve o TSP com a seguinte restrição: dado um inteiro positivo $k$ e qualquer par de cidades $i$ e $j$, se $j \geq i + k$ então em qualquer solução viável do problema, a cidade $i$ deve preceder a cidade $j$, ou seja, $\pi(i) < \pi(j)$. A este problema, vamos nos referir como TSP restrito. O algoritmo consiste de uma redução do TSP restrito para o problema de encontrar um caminho de menor custo em um grafo dirigido acíclico.
 
-Existem propriedades importantes que valem destacar. A primeira delas determina as cidades candidatas a ocupar uma determinada posição em uma solução viável, $\pi^{-1}$. As cidades candidatas a ocupar a posição $i$ de uma solução viável são aquelas dentro do intervalo de inteiros $\{\max\{1, i - k + 1\}, \dots, \min\{i + k - 1, n\}\}$. Podemos então escrever que uma cidade candidata $\pi^{-1}(i)$ atende a seguinte restrição $$\max\{1, i-k+1\} \leq \pi^{-1}(i) \leq \min\{i+k-1,n\}.$$ Para qualquer cidade $j$, a posição de $j$ em uma solução viável também está definida dentro do seguinte intervalo de inteiros $\{\max\{1, j-k+1\}, \dots \min\{j + k -1,n\}\}$, ou seja, $$\max\{1, j-k+1\} \leq \pi(j) \leq \min\{j+k-1,n\}.$$ Portanto, dada a ($i-1$)-ésima visita do caixeiro viajante a algum vértice do grafo, o próximo vértice $j$ a ser visitado poderá ser obtido através da construção de um grafo auxiliar considerando todas as possibilidades de vértices candidatos para a posição $i$ (ou seja, $\pi^{-1}(i) = \max\{1, i-k+1\}, \dots, \min\{i+k-1,n\}$) e considerando todas as posições que uma cidade $j$ pode ocupar (ou seja, $\pi(j) = \max\{1, j-k+1\}, \dots, \min\{j+k-1,n\}$). Caso alguma cidade candidata $j$ para a posição $i$ não esteja dentro do intervalo descrito acima, então essa cidade não deve ser considerada. 
+Existem condições necessárias importantes (mas não suficientes) que valem destacar. A primeira delas determina as cidades candidatas a ocupar uma determinada posição em uma solução viável, $\pi^{-1}$. As cidades candidatas a ocupar a posição $i$ de uma solução viável são aquelas dentro do intervalo de inteiros $\{\max\{1, i - k + 1\}, \dots, \min\{i + k - 1, n\}\}$. Podemos então escrever que uma cidade candidata $\pi^{-1}(i)$ atende a seguinte restrição $$\max\{1, i-k+1\} \leq \pi^{-1}(i) \leq \min\{i+k-1,n\}.$$ Para qualquer cidade $j$, a posição de $j$ em uma solução viável também está definida dentro do seguinte intervalo de inteiros $\{\max\{1, j-k+1\}, \dots \min\{j + k -1,n\}\}$, ou seja, $$\max\{1, j-k+1\} \leq \pi(j) \leq \min\{j+k-1,n\}.$$ Portanto, dada a ($i-1$)-ésima visita do caixeiro viajante a algum vértice do grafo, o próximo vértice $j$ a ser visitado poderá ser obtido através da construção de um grafo auxiliar considerando todas as possibilidades de vértices candidatos para a posição $i$ (ou seja, $\pi^{-1}(i) = \max\{1, i-k+1\}, \dots, \min\{i+k-1,n\}$) e considerando todas as posições que uma cidade $j$ pode ocupar (ou seja, $\pi(j) = \max\{1, j-k+1\}, \dots, \min\{j+k-1,n\}$). Caso alguma cidade candidata $j$ para a posição $i$ não esteja dentro do intervalo descrito acima, então essa cidade não deve ser considerada. Além disso, devemos ainda verificar a condição do TSP restrito: se $j \geq i + k$ então $\pi(i) < \pi(j)$.
 
 O grafo auxiliar $G^*$ é construído com $n+1$ camadas. O conjunto de vértices da camada $i$ do grafo auxiliar é denotado por $V^*_i$. $V^*_1 = \{s\}$ (vértice fonte $s$). $V^*_{n+1} = \{t=s\}$ (vértice sorvedouro $t$ que é igual a fonte $s$). O número de vértices de uma cada $V^i_i$ é no máximo $(k+1)2^{k-2}$ para $i=2, \dots, n$. O grau de entrada de cada vértice do grafo auxiliar é no máximo $k$.
 
@@ -81,40 +81,42 @@ $$ i < l < j + k(j) - 1,$$ sendo que a segunda desigualdade vale pois precisamos
 
 Quando $i < j$, então teremos $\pi(l) > \pi(j)$ para $j-i$ cidades $l$ tais que $l < j$. Vamos ver o porquê. As cidades de $N_{j-1}$ podem ocupar até $i-1$ posições $k$ tal que $\pi(k) < \pi(j)$. As outras cidades de $N_{j-1}$, ou seja $j-1-(i-1)=j-i$ cidades, ocupam posições depois de $i$. Dessa forma, para uma cidade $l$ dentre essa $j-i$ cidades, temos $\pi(l) > \pi(j)$ como queríamos mostrar. Mas, $\pi(l) > \pi(j)$ implica que $j \leq l + k(l) -1$ (TSP restrito). Assim, o conjunto de cidades $l < j$ tal que $\pi(l) > \pi(j)$ é exatamente $P_j$. Portanto, $|P_j| \geq j-i$ ou $i \geq j - |P_j|$.
 
-\paragraph{Suficiência.} Considere que para algum $i$ e $j$ vale que $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$. A demonstração segue construindo soluções viáveis do TSP restrito e generalizado com $\pi(j)=i$. Se $i=j$, então $\pi(j)=j$ para todo $j \in N$ é uma solução viável.
+\paragraph{Suficiência.} Balas segue com a demonstração da suficiência construindo soluções viáveis com $\pi(j)=i$. Para mais detalhes, consulte \cite{Ba}.% Considere que para algum $i$ e $j$ vale que $\max \{1, j - |P_j|\} \leq i \leq \min\{n, j + k(j) - 1\}$. A demonstração segue construindo soluções viáveis do TSP restrito e generalizado com $\pi(j)=i$. Se $i=j$, então $\pi(j)=j$ para todo $j \in N$ é uma solução viável.
 
-Se $i > j$, então uma solução viável é a seguinte $\pi(l) = l$ para $l = 1, 2, \dots, j-1$ e $l= i+1, i+2, \dots, n$, $\pi(j) = i$ e $\pi(l) = l-1$ para $l = j+1, j+2, \dots, i$. Veja um exemplo na Figura \ref{fig1}.
+%Se $i > j$, então uma solução viável é a seguinte $\pi(l) = l$ para $l = 1, 2, \dots, j-1$ e $l= i+1, i+2, \dots, n$, $\pi(j) = i$ e $\pi(l) = l-1$ para $l = j+1, j+2, \dots, i$. Veja um exemplo na Figura \ref{fig1}.
 
-\begin{figure}
-  \centering
-  \psfrag{1}{\small 1}
-  \psfrag{2}{\small 2}
-  \psfrag{3}{\small 3}
-  \psfrag{4}{\small 4}
-  \psfrag{5}{\small 5}
-  \psfrag{6}{\small 6}
-  \psfrag{7}{\small 7}
-  \psfrag{8}{\small 8}
-  \psfrag{5i}{\bf \small 5}
-  \psfrag{6i}{\bf \small 6}
-  \psfrag{7i}{\bf \small 7}
-  \psfrag{8i}{\bf \small 8}
-  \psfrag{9}{\small 9}
-  \psfrag{10}{\small 10}
-  \psfrag{11}{\small 11}
-  \psfrag{12}{\small 12}
-  \psfrag{13}{\small 13}
-  \psfrag{j}{\small $j$}
-  \psfrag{i}{\small $i$}
-  \psfrag{N}{$N$}
-  \psfrag{pi}{$\pi$}
-  \includegraphics[scale=.5]{fig1.eps}
-  \caption{Caso com $i = 8$ e $j = 5$.}
-  \label{fig1}
-\end{figure}
+%% \begin{figure}
+%%   \centering
+%%   \psfrag{1}{\small 1}
+%%   \psfrag{2}{\small 2}
+%%   \psfrag{3}{\small 3}
+%%   \psfrag{4}{\small 4}
+%%   \psfrag{5}{\small 5}
+%%   \psfrag{6}{\small 6}
+%%   \psfrag{7}{\small 7}
+%%   \psfrag{8}{\small 8}
+%%   \psfrag{5i}{\bf \small 5}
+%%   \psfrag{6i}{\bf \small 6}
+%%   \psfrag{7i}{\bf \small 7}
+%%   \psfrag{8i}{\bf \small 8}
+%%   \psfrag{9}{\small 9}
+%%   \psfrag{10}{\small 10}
+%%   \psfrag{11}{\small 11}
+%%   \psfrag{12}{\small 12}
+%%   \psfrag{13}{\small 13}
+%%   \psfrag{j}{\small $j$}
+%%   \psfrag{i}{\small $i$}
+%%   \psfrag{N}{$N$}
+%%   \psfrag{pi}{$\pi$}
+%%   \includegraphics[scale=.5]{fig1.eps}
+%%   \caption{Caso com $i = 8$ e $j = 5$.}
+%%   \label{fig1}
+%% \end{figure}
 
-Se $i < j$, então
+     
+%Se $i < j$, então
 
+Balas apresenta uma caracterização que determina o valor de $\pi(i)$ dentro de um intervalo de números inteiros. Para que haja também uma caracterização determinando o valor de $\pi^{-1}(i)$ (ou seja, os candidatos para a posição $i$) dentro de um intervalo de números inteiros, os valores $k(i)$ precisam atender ao seguinte: $k(i) - k(i+1) \leq 1$ para $i = 1, \dots, n$. Em geral, o que temos é a seguinte condição necessária mas não suficiente. Para qualquer solução viável do TSP restrito e generalizado, $j_{(i)} \leq \pi^{-1}(i) \leq j^{(i)}$ para qualquer posição $i$ desta solução sendo $$j_{(i)} := \min\{j: j + k(j) \geq i+1\},$$ $$j^{(i)} := \max\{j: j - i \leq |P_j|\}.$$
 
 \medskip
 \printbibliography
