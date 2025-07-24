@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2024.6.11)  23 JUL 2025 18:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2024.6.11)  23 JUL 2025 23:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -536,7 +536,7 @@ Overfull \hbox (0.40234pt too wide) in paragraph at lines 35--36
 [1
 
 ] [2]
-Overfull \hbox (1.42693pt too wide) in paragraph at lines 58--59
+Overfull \hbox (1.42693pt too wide) in paragraph at lines 57--58
 \OT1/cmr/m/n/10 ad-ja-cen-tes (com-pat^^S^^Pveis) se e so-mente se $\OML/cmm/m/
 it/10 j \OMS/cmsy/m/n/10 6\OT1/cmr/m/n/10 = \OML/cmm/m/it/10 l$ \OT1/cmr/m/n/10
  e vale uma das se-guin-tes condi^^Xc~oes. 
@@ -550,11 +550,11 @@ Package logreq Info: Writing requests to 'balas.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 11461 strings out of 480155
- 214274 string characters out of 5893814
+ 11471 strings out of 480155
+ 214370 string characters out of 5893814
  730565 words of memory out of 5000000
- 29311 multiletter control sequences out of 15000+600000
- 477973 words of font info for 62 fonts, out of 8000000 for 9000
+ 29317 multiletter control sequences out of 15000+600000
+ 479517 words of font info for 68 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
  60i,10n,68p,1852b,1574s stack positions out of 5000i,500n,10000p,200000b,80000s
 

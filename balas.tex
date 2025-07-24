@@ -47,8 +47,7 @@ O grafo auxiliar $G^*$ é construído com $n+1$ camadas. O conjunto de vértices
 Em geral, a segunte recorrência calcula o custo de um segmento ótimo começando na cidade 1, passando pelas cidades de um subconjunto $W\subset N$ nas posições $2, \dots, i-1$ e visitando a cidade $j$ na posição $i$: $$C(W,i,j) = \min_{l\in W}\{W \backslash \{l\}, i-1, l\}.$$
 
 No TSP clássico, existem muitas possibilidades para um conjunto $W$ com $i-2$ elementos, a saber, $\binom {n}{i-2}$. No entanto, no TSP restrito, as possibilidades para $W$ são poucas e descritas por pares de subconjuntos cujo tamanho de cada um é limitado por $k$. Os pares são:
-$$ S^-(\pi, i):= \{l \in (1, \dots, n): l \geq i, \pi(l) \leq i-1\}$$
-e
+$$ S^-(\pi, i):= \{l \in (1, \dots, n): l \geq i, \pi(l) \leq i-1\} \textmd{ e }$$
 $$ S^+(\pi, i):= \{h \in (1, \dots, n): h \leq i-1, \pi(h) \geq i\}.$$
 
 Descrevendo os conjuntos acima de outra forma, $S^-(\pi, i)$ é o conjunto de cidades de uma solução viável $\pi$ que possuem índices maiores ou iguais a $i$ e que foram visitadas em alguma posição $1, \dots, i-1$, enquanto que $S^+(\pi,i)$ é o conjunto de cidades de uma solução viável $\pi$ que possuem índices menores ou iguais a $i-1$ e serão visitadas em alguma posição $i, \dots, n$. É demonstrado que $|S^-(\pi, i)| = |S^+(\pi, i)| \leq \lfloor k/2 \rfloor$.
@@ -88,25 +87,25 @@ Se $i > j$, então uma solução viável é a seguinte $\pi(l) = l$ para $l = 1,
 
 \begin{figure}
   \centering
-  \psfrag{1}{\tiny 1}
-  \psfrag{2}{\tiny 2}
-  \psfrag{3}{\tiny 3}
-  \psfrag{4}{\tiny 4}
-  \psfrag{5}{\tiny 5}
-  \psfrag{6}{\tiny 6}
-  \psfrag{7}{\tiny 7}
-  \psfrag{8}{\tiny 8}
-  \psfrag{5i}{\bf \tiny 5}
-  \psfrag{6i}{\bf \tiny 6}
-  \psfrag{7i}{\bf \tiny 7}
-  \psfrag{8i}{\bf \tiny 8}
-  \psfrag{9}{\tiny 9}
-  \psfrag{10}{\tiny 10}
-  \psfrag{11}{\tiny 11}
-  \psfrag{12}{\tiny 12}
-  \psfrag{13}{\tiny 13}
-  \psfrag{j}{\tiny $j$}
-  \psfrag{i}{\tiny $i$}
+  \psfrag{1}{\small 1}
+  \psfrag{2}{\small 2}
+  \psfrag{3}{\small 3}
+  \psfrag{4}{\small 4}
+  \psfrag{5}{\small 5}
+  \psfrag{6}{\small 6}
+  \psfrag{7}{\small 7}
+  \psfrag{8}{\small 8}
+  \psfrag{5i}{\bf \small 5}
+  \psfrag{6i}{\bf \small 6}
+  \psfrag{7i}{\bf \small 7}
+  \psfrag{8i}{\bf \small 8}
+  \psfrag{9}{\small 9}
+  \psfrag{10}{\small 10}
+  \psfrag{11}{\small 11}
+  \psfrag{12}{\small 12}
+  \psfrag{13}{\small 13}
+  \psfrag{j}{\small $j$}
+  \psfrag{i}{\small $i$}
   \psfrag{N}{$N$}
   \psfrag{pi}{$\pi$}
   \includegraphics[scale=.5]{fig1.eps}
