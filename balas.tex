@@ -120,9 +120,37 @@ Balas apresenta uma caracterização que determina o valor de $\pi(i)$ dentro de
 
 Um teste mais rápido para verificar se um vértice $v$ do grafo construído pertence a alguma solução inviável pode ser feita através de um limitante denotado $kthresh(v)$. Primeiro, é importante notar que um vértice $v=(i, j, S^-_{ij}, S^+_{ij})$ em uma solução viável do problema, implica que $k(j)$ é maior que a diferença entre a cidade de maior índice em $S^-$ e $j$ (pois, $l < j + k(j)$ para todo $l$ em $S^-_{ij}$ e assim, $k(j) > \max\{S^-_{ij}\} - j$). Para tratar $S^-_{ij} = \emptyset$, temos $k(j) > \max\{0, \max\{S^-_{ij}\}\} - j$. Dessa forma, $kthresh(v) = 1+\max\{0, \max\{S^-_{ij}\}\} - j$. Portanto, qualquer vértice $v=(i,j,S^-_{ij}, S^+_{ij})$ tal que $kthresh(v) > k(j)$ pertence a uma solução inviável e pode ser desconsiderado.
 
-Para finalizar, agora vamos mostrar como Balas e Simonetti transformam o problema do TSP com janelas de tempos para o TSP restrito e generalizado. A ideia é usar as janelas para impor restrições de precedência: se $j \geq i + k(i)$, então $\pi(i) < \pi(j)$. Suponha que cada cidade $i$ tenha janelas de tempo definidas no intervalo $[a_i, b_i]$. Considere também $t_{ij}$, o tempo de viagem de $i$ até $j$. Em qualquer solução viável, uma cidade $i$ tem que preceder uma cidade $j$ se $a_j + t_{ji} > b_i$. Fixada uma cidade $i$, ao escolher a cidade $j_0$ com menor índice tal que $a_j + t_{ji} > b_i$ para toda cidade $j \geq j_0$, então podemos definir $k(i)=j_0 - i$.
+Para finalizar, agora vamos mostrar como Balas e Simonetti transformam o problema do TSP com janelas de tempos para o TSP restrito e generalizado. A ideia é usar as janelas para impor restrições de precedência: se $j \geq i + k(i)$, então $\pi(i) < \pi(j)$. Suponha que cada cidade $i$ tenha janelas de tempo definidas no intervalo $[a_i, b_i]$. Considere também $t_{ij}$, o tempo de viagem de $i$ até $j$. Em qualquer solução viável, uma cidade $i$ tem que preceder uma cidade $j$ se $a_j + t_{ji} > b_i$. Fixada uma cidade $i$, ao escolher a cidade $j_0$ com menor índice tal que $a_j + t_{ji} > b_i$ para toda cidade $j \geq j_0$, então podemos definir $k(i)=j_0 - i$. Para a cidade 1, $k(1) = 1$ e para as outras cidades, caso não exista tal $j_0$, então $j_0=n+1$.
 
+\begin{figure}[ht]
+  \centering
+  \psfrag{k}{\small $k$}
+  \psfrag{janela}{\small janela}
+  \psfrag{j0-i}{\small $j_0-i$}
+  \psfrag{5-2}{\small $5-2$}
+  \psfrag{7-3}{\small $7-3$}
+  \psfrag{5-4}{\small $5-4$}
+  \psfrag{8-5}{\small $8-5$}
+  \psfrag{8-6}{\small $8-6$}
+  \psfrag{8-7}{\small $8-7$}
+  \psfrag{1}{\small 1}
+  \psfrag{2}{\small 2}
+  \psfrag{3}{\small 3}
+  \psfrag{4}{\small 4}
+  \psfrag{5}{\small 5}
+  \psfrag{6}{\small 6}
+  \psfrag{7}{\small 7}
+  \psfrag{8}{\small 8}
+  \psfrag{9}{\small 9}
+  \psfrag{i}{\small $i$}
+  \psfrag{N}{$N$}
+  \psfrag{pi}{$\pi$}
+  \includegraphics[scale=.7]{fig2.eps}
+  \caption{Caso com $t_{ji} = 0$. Mesmo exemplo presente no trabalho de Balas e Simonetti.}
+  \label{fig1}
+\end{figure}
 
+Alterar a ordem das cidades pode alterar os $k(i)$'s encontrados. Quanto menor for $k= \max_{i=1, \dots, n}\{k(i)\}$, melhor será o desempenho do algoritmo, já que o tempo de execução depende exponenciamente de tal $k$. Balas e Simonetti comentam que encontrar tal $k$ talvez seja NP-difícil \cite{BS}.
 
 \medskip
 \printbibliography
