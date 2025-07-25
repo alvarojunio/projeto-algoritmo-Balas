@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2024.6.11)  25 JUL 2025 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2024.6.11)  25 JUL 2025 18:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -550,24 +550,24 @@ tra^^Xc~ao da su-fici^encia cons-truindo solu^^Xc~oes
 
 [4]
 File: fig2.eps Graphic file (type eps)
- <fig2.eps> [5] [6] (./balas.aux)
+ <fig2.eps> [5]
+Overfull \hbox (0.27773pt too wide) in paragraph at lines 155--155
+[]\OT1/cmr/bx/n/14.4 Carro el^^Setrico - \OT1/cmr/bx/it/14.4 Elec-tric Tra-va-l
+ing Sa-las-men Pro-
+ []
 
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please rerun LaTeX.
-
+[6] (./balas.aux)
 Package logreq Info: Writing requests to 'balas.run.xml'.
 \openout1 = `balas.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 11473 strings out of 480155
- 214494 string characters out of 5893814
- 730571 words of memory out of 5000000
- 29320 multiletter control sequences out of 15000+600000
- 479209 words of font info for 67 fonts, out of 8000000 for 9000
+ 11475 strings out of 480155
+ 214520 string characters out of 5893814
+ 730600 words of memory out of 5000000
+ 29321 multiletter control sequences out of 15000+600000
+ 479568 words of font info for 68 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
- 60i,10n,68p,1852b,1579s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,10n,68p,1852b,1576s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on balas.dvi (6 pages, 27352 bytes).
+Output written on balas.dvi (6 pages, 30132 bytes).

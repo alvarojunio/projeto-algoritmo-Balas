@@ -152,8 +152,10 @@ Para finalizar, agora vamos mostrar como Balas e Simonetti transformam o problem
 
 Alterar a ordem das cidades pode alterar os $k(i)$'s encontrados. Quanto menor for $k= \max_{i=1, \dots, n}\{k(i)\}$, melhor será o desempenho do algoritmo, já que o tempo de execução depende exponenciamente de tal $k$. Balas e Simonetti comentam que encontrar tal $k$ talvez seja NP-difícil \cite{BS}.
 
-\section*{Carro elétrico}
+\section*{Carro elétrico - \textit {Electric Travaling Salasmen Problem with Time Windows} (E-TSPTW)}
 A partir daqui, vamos também usar a notação presente no artigo de Roberti e Wen \cite{RW}.
+
+O conjunto de vértices é $V = \{o, d\} \cup C \cup S$, onde $o$ é a origem $d$ é o destino (uma cópia da origem), $C$ é o conjunto de $n$ clientes a visitar e $S$ é o conjunto de $m$ estações de recarga. Uma janela de tempo $[e_i, l_i]$ é defida para a origem, destino, e elemento $i$ de $C$. Tanto $e_i$ quanto $l_i$ são números inteiros positivos. As janelas de tempo são \emph{duras} ({\it hard}), ou seja, um vértice $i$ pode ser visitado antes de $e_i$ mas não depois de $l_i$. As estações de recarga estão sempre disponíveis. Entre os vértices $i$ e $j$ de $V$ temos a distância entre eles ($d_{ij}$), o tempo entre eles ($t_{ij}$) e o consumo de bateria ao percorrer $d_{ij}$ ($q_{ij}$). Todos números inteiros positivos. O consumo de bateria é dado por $q_{ij} = hd_{ij}$, sendo $h$ a taxa de consumo igual para todos os arcos do grafo de entrada. O tempo de recarga é linear em relação à quantidade a ser carregada (taxa de recarga é igual a $g$ e vale para todas as estações). Em uma solução viável, uma recarga pode ser realizada muitas vezes em uma única estação. O vértice origem é também uma estação de recarga. No presente trabalho de iniciação científica, consideramos a recarga total da bateria. Mas existem trabalhos que consideram recarga parcial. Uma solução viável começa na origem, termina no destino e passa por todos os clientes uma única vez, dentro da correspondente janela de tempo, podendo passar por estações de recarga. Em nenhum momento, a bateria pode acabar. A solução ótima é uma viável com a menor distância percorrida possível. Consideramos $d_{ij} = t_{ij}$ para todo arco $(i,j)$.
 
 \medskip
 \printbibliography
