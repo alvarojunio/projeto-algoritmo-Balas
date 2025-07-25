@@ -76,5 +76,37 @@
     \field{journaltitle}{INFORMS journal on Computing}
     \field{year}{2001}
   \endentry
+
+  \entry{RW}{article}{}
+    \name{author}{2}{}{%
+      {{hash=RR}{%
+         family={Roberti},
+         familyi={R\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=WM}{%
+         family={Wen},
+         familyi={W\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier}%
+    }
+    \strng{namehash}{RRWM1}
+    \strng{fullhash}{RRWM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{2}
+    \field{sortinithash}{2}
+    \field{pages}{32\bibrangedash 52}
+    \field{title}{The electric traveling salesman problem with time windows}
+    \field{volume}{89}
+    \field{journaltitle}{Transportation Research Part E: Logistics and
+  Transportation Review}
+    \field{year}{2016}
+  \endentry
 \enddatalist
 \endinput
