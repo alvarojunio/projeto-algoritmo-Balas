@@ -35,7 +35,7 @@ long long allVisited;
 int numberOfCities;
 
 vector<vector<double>> distances;
-vector<TimeWindow> timeWindows;
+vector<TimeWindow> timeWindows, originalTimeWindows;
 vector<int> k, p, jL, jR;
 
 long long nextIndex, sourceIndex, sinkIndex;
@@ -140,6 +140,7 @@ void getTimeWindows() {
         cin >> timeWindows[i].a >> timeWindows[i].b;
         timeWindows[i].ind = i;
     }
+    originalTimeWindows = timeWindows;
     timeWindows[1].a = timeWindows[1].b = 0;
 }
 
@@ -154,8 +155,9 @@ void getVariableK() {
     jR.assign(numberOfCities + 2, 0);
 
     sort(timeWindows.begin() + 2, timeWindows.end(), sortMidpoint);
+    sort(originalTimeWindows.begin() + 2, originalTimeWindows.end(), sortMidpoint);
 
-    // Mudança da matriz de distâncis pós mudança nos índices na ordenação das janelas de tempo
+    // Mudança da matriz de distâncias pós mudança nos índices na ordenação das janelas de tempo
     vector<vector<double>> distancesAux(numberOfCities + 1, vector<double>(numberOfCities + 1, 0));
     for(int i = 1; i <= numberOfCities; i++) {
         for(int j = 1; j <= numberOfCities; j++) {
@@ -244,8 +246,13 @@ signed main()
         for (int s : node.Smais)
             cout << s << " ";
 
-        cout << timeWindows[node.city].a << " " << timeWindows[node.city].b;
         cout << endl;
+    }
+    cout << 0 << endl;
+
+    cout << numberOfCities << endl;
+    for (int i = 1; i <= numberOfCities; i++) {
+        cout << originalTimeWindows[i].a << " " << originalTimeWindows[i].b << " " << originalTimeWindows[i].ind << endl;
     }
 
     return 0;
