@@ -147,15 +147,45 @@ Para finalizar, agora vamos mostrar como Balas e Simonetti transformam o problem
   \psfrag{pi}{$\pi$}
   \includegraphics[scale=.7]{fig2.eps}
   \caption{Caso com $t_{ji} = 0$. Mesmo exemplo presente no trabalho de Balas e Simonetti.}
-  \label{fig1}
+  \label{fig2}
 \end{figure}
 
 Alterar a ordem das cidades pode alterar os $k(i)$'s encontrados. Quanto menor for $k= \max_{i=1, \dots, n}\{k(i)\}$, melhor será o desempenho do algoritmo, já que o tempo de execução depende exponenciamente de tal $k$. Balas e Simonetti comentam que encontrar tal $k$ talvez seja NP-difícil \cite{BS}.
 
-\section*{Carro elétrico - \textit {Electric Travaling Salasmen Problem with Time Windows} (E-TSPTW)}
+\section*{TSP com carro elétrico - \textit {Electric Travaling Salasmen Problem with Time Windows} (E-TSPTW)}
 A partir daqui, vamos também usar a notação presente no artigo de Roberti e Wen \cite{RW}.
 
 O conjunto de vértices é $V = \{o, d\} \cup C \cup S$, onde $o$ é a origem $d$ é o destino (uma cópia da origem), $C$ é o conjunto de $n$ clientes a visitar e $S$ é o conjunto de $m$ estações de recarga. Uma janela de tempo $[e_i, l_i]$ é defida para a origem, destino, e elemento $i$ de $C$. Tanto $e_i$ quanto $l_i$ são números inteiros positivos. As janelas de tempo são \emph{duras} ({\it hard}), ou seja, um vértice $i$ pode ser visitado antes de $e_i$ mas não depois de $l_i$. As estações de recarga estão sempre disponíveis. Entre os vértices $i$ e $j$ de $V$ temos a distância entre eles ($d_{ij}$), o tempo entre eles ($t_{ij}$) e o consumo de bateria ao percorrer $d_{ij}$ ($q_{ij}$). Todos números inteiros positivos. O consumo de bateria é dado por $q_{ij} = hd_{ij}$, sendo $h$ a taxa de consumo igual para todos os arcos do grafo de entrada. O tempo de recarga é linear em relação à quantidade a ser carregada (taxa de recarga é igual a $g$ e vale para todas as estações). Em uma solução viável, uma recarga pode ser realizada muitas vezes em uma única estação. O vértice origem é também uma estação de recarga. No presente trabalho de iniciação científica, consideramos a recarga total da bateria. Mas existem trabalhos que consideram recarga parcial. Uma solução viável começa na origem, termina no destino e passa por todos os clientes uma única vez, dentro da correspondente janela de tempo, podendo passar por estações de recarga. Em nenhum momento, a bateria pode acabar. A solução ótima é uma viável com a menor distância percorrida possível. Consideramos $d_{ij} = t_{ij}$ para todo arco $(i,j)$.
+
+É importante destacar a seguinte propriedade do algoritmo de programação dinâmica de Balas. Dada que uma cidade foi visitada na posição $i$, o algoritmo considera todas as possíveis cidades que poderíam ocupar a posição $i+1$, ou seja, as cidade candidatas de $\pi^{-1}(i+1)$. No algoritmo de Balas, o caixeiro viajante sai de uma cidade $u$ visitada na posição $i$ e vai direto para a próxima cidade $v$ na posição $i+1$. A adaptação do algoritmo de Balas para o E-TSPTW considera que o caixeiro ou vai direto de $u$ para $v$; ou passa para recarregar a bateria em alguma estação de recarga. Lembre que denotamos por $(i,j,S^-_{ij},S^+_{ij})$ um vértice do grafo auxiliar que visita a cidade $j$ na posição $i$ com os conjuntos $S^-$ e $S^+$ definidos em função da compatibilidade entre vértices do grafo. Para o caso do E-TSPTW, vamos denotar por $(i, j, S^-_{ij}, S^+_{ij}, q, c)$, sendo $q$ a bateria do carro elétrico no vértice e $c$ um custo neste vértice que corresponde a um caminho que começa na origem, termina em $j$ e passa pelas cidades em $\{N_{i} \backslash S^+_{ij}\} \cup S^-_{ij}$. No grafo da Figura \ref{fig3}, temos o caminho $u \rightarrow v \rightarrow x \rightarrow w$ e o caminho $u  \rightarrow x  \rightarrow v  \rightarrow w$. No grafo auxiliar, teremos possivelmente dois vértices para representar estes dois caminhos. Os vértices são $(i, w, (S^-_{iw})^1, (S^+_{iw})^1, q^1, c^1)$ e $(i, w, (S^-_{iw})^2, (S^+_{iw})^2, q^2, c^2)$. Caso $(S^-_{iw})^1 = (S^-_{iw})^2$ e $(S^-_{iw})^2 = (S^-_{iw})^2$, então podemos eventualmente remover o vértice do grafo auxiliar correspondente ao caminho 1 (2), se $q_1 \leq q_2$ ($q_2 \leq q_1$) e $c_1 \geq c_2$ ($c_2 \geq c_1$). Caso contrário (ou exclusivo), precisamos manter ambos os vértices no grafo auxiliar. 
+
+\begin{figure}[ht]
+  \centering
+  \psfrag{k}{\small $k$}
+  \psfrag{janela}{\small janela}
+  \psfrag{j0-i}{\small $j_0-i$}
+  \psfrag{5-2}{\small $5-2$}
+  \psfrag{7-3}{\small $7-3$}
+  \psfrag{5-4}{\small $5-4$}
+  \psfrag{8-5}{\small $8-5$}
+  \psfrag{8-6}{\small $8-6$}
+  \psfrag{8-7}{\small $8-7$}
+  \psfrag{1}{\small 1}
+  \psfrag{2}{\small 2}
+  \psfrag{w}{\small $w$}
+  \psfrag{v}{\small $v$}
+  \psfrag{u}{\small $u$}
+  \psfrag{x}{\small $x$}
+  \psfrag{7}{\small 7}
+  \psfrag{8}{\small 8}
+  \psfrag{9}{\small 9}
+  \psfrag{i}{\small $i$}
+  \psfrag{N}{$N$}
+  \psfrag{pi}{$\pi$}
+  \includegraphics[scale=.7]{fig3.eps}
+  \caption{Dois caminhos de $u$ para $w$ com custo e consumo de bateria diferentes.}
+  \label{fig3}
+\end{figure}
 
 \medskip
 \printbibliography
