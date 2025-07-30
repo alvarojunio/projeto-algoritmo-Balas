@@ -52,7 +52,7 @@ bool viable(const Node& node){
     return true;
 }
 
-void addAdj(Node &node, vector<int> &adjCities, queue<long long> &q) {
+void addAdj(Node &node, vector<int> &adjCities, queue<long long> &nextCitiesQueue) {
     if(!viable(node)) return;
 
     if(nodeIndex.find(node) != nodeIndex.end()) {
@@ -62,18 +62,18 @@ void addAdj(Node &node, vector<int> &adjCities, queue<long long> &q) {
         nodeIndex[node] = id;
         nodes[id] = node;
         adjCities.push_back(id);
-        q.push(id);
+        nextCitiesQueue.push(id);
     }
 }
 
 // indice / numero de adj / adj1 / adj2 / ...
 void tsp()
 {
-    queue<long long> q;
-    q.push(sourceIndex);
+    queue<long long> nextCitiesQueue;
+    nextCitiesQueue.push(sourceIndex);
 
-    while (!q.empty()) {
-        long long id = q.front(); q.pop();
+    while (!nextCitiesQueue.empty()) {
+        long long id = nextCitiesQueue.front(); nextCitiesQueue.pop();
         cout << id << " ";
 
         Node l = nodes[id];
@@ -113,7 +113,7 @@ void tsp()
                 }
 
                 Node nodeAux(i, j, l.visited | bit, SmenosAux, SmaisAux);
-                addAdj(nodeAux, adjCities, q);
+                addAdj(nodeAux, adjCities, nextCitiesQueue);
             }
         }
         
@@ -196,8 +196,8 @@ void getVariableK() {
         }
     }
 
-    for (int i = 1; i <= numberOfCities+1; ++i) {
-        for (int j = numberOfCities; j >= 1; --j) {
+    for (int i = 1; i <= numberOfCities+1; i++) {
+        for (int j = numberOfCities; j >= 1; j--) {
             if (p[j] >= j - i) { jR[i] = j; break; }
         }
     }
@@ -234,7 +234,7 @@ signed main()
 
     cout << 0 << endl;
 
-    // numero / layer / cidade / visitados / s-.size() / s- / s+.size() / s+ / start Timewindow / end TimeWindow
+    // numero / layer / cidade / visitados / s-.size() / s- / s+.size() / s+ 
     for (auto [i, node] : nodes) {
         cout << i << " " << node.layer << " " << node.city << " " << node.visited << " ";
 
