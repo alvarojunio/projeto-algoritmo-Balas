@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=latex 2025.1.18)  1 AUG 2025 16:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=latex 2025.1.18)  1 AUG 2025 17:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -585,6 +585,6 @@ Here is how much of TeX's memory you used:
  31662 multiletter control sequences out of 15000+600000
  522596 words of font info for 72 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
- 63i,10n,68p,2895b,1580s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 63i,10n,68p,3114b,1580s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on balas.dvi (8 pages, 38668 bytes).
+Output written on balas.dvi (8 pages, 38972 bytes).
