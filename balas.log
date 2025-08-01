@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=latex 2025.1.18)  29 JUL 2025 20:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=latex 2025.1.18)  1 AUG 2025 15:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -573,18 +573,18 @@ SPTW)
 
 [6]
 File: fig3.eps Graphic file (type eps)
- <fig3.eps> [7] (./balas.aux)
+ <fig3.eps> [7] [8] (./balas.aux)
 Package logreq Info: Writing requests to 'balas.run.xml'.
 \openout1 = `balas.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 11635 strings out of 477959
- 218161 string characters out of 5838606
+ 11636 strings out of 477959
+ 218177 string characters out of 5838606
  1867327 words of memory out of 5000000
- 31661 multiletter control sequences out of 15000+600000
+ 31662 multiletter control sequences out of 15000+600000
  522596 words of font info for 72 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
- 63i,10n,68p,2723b,1580s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 63i,10n,68p,2895b,1580s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on balas.dvi (7 pages, 36336 bytes).
+Output written on balas.dvi (8 pages, 38472 bytes).
