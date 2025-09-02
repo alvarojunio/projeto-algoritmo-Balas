@@ -1,21 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
+using namespace std::chrono;
 
-#define int long long
 #define ll long long
 
-const long long INF = 1e18;
+const ll INF = 1e18;
 
 struct Node
 {
-    int layer, city;
+    ll layer, city;
     ll visited;
-    set<int> Smenos, Smais;
+    set<ll> Smenos, Smais;
     double batteryLevel;
     ll recharge;
 
     Node() {};
-    Node(int layer, int city, ll visited, const set<int> &Smenos, const set<int> &Smais, double batteryLevel, ll recharge) : layer(layer), city(city), visited(visited), Smenos(Smenos), Smais(Smais), batteryLevel(batteryLevel), recharge(recharge) {};
+    Node(ll layer, ll city, ll visited, const set<ll> &Smenos, const set<ll> &Smais, double batteryLevel, ll recharge) : layer(layer), city(city), visited(visited), Smenos(Smenos), Smais(Smais), batteryLevel(batteryLevel), recharge(recharge) {};
 
     bool operator==(const Node &other) const {
         return (layer == other.layer && city == other.city && visited == other.visited && 
@@ -29,36 +29,36 @@ struct Node
 
 struct Costumer
 {
-    int id, x, y, timeWindowStart, timeWindowEnd;
+    ll id, x, y, timeWindowStart, timeWindowEnd;
 
     Costumer() {};
-    Costumer(int id, int x, int y, int timeWindowStart, int timeWindowEnd) : id(id), x(x), y(y), timeWindowStart(timeWindowStart), timeWindowEnd(timeWindowEnd) {};
+    Costumer(ll id, ll x, ll y, ll timeWindowStart, ll timeWindowEnd) : id(id), x(x), y(y), timeWindowStart(timeWindowStart), timeWindowEnd(timeWindowEnd) {};
 };
 
 struct RechargingStation
 {
-    int id, x, y, timeWindowStart, timeWindowEnd;
+    ll id, x, y, timeWindowStart, timeWindowEnd;
 
     RechargingStation() {};
-    RechargingStation(int id, int x, int y, int timeWindowStart, int timeWindowEnd) : id(id), x(x), y(y), timeWindowStart(timeWindowStart), timeWindowEnd(timeWindowEnd) {};
+    RechargingStation(ll id, ll x, ll y, ll timeWindowStart, ll timeWindowEnd) : id(id), x(x), y(y), timeWindowStart(timeWindowStart), timeWindowEnd(timeWindowEnd) {};
 };
 
-map<int, Node> nodes;
-map<Node, int> nodeIndex;
+map<ll, Node> nodes;
+map<Node, ll> nodeIndex;
 
 ll allVisited;
-int numberOfCustomers, numberOfRechargingStations;
-int nextIndex, sourceIndex, sinkIndex;
+ll numberOfCustomers, numberOfRechargingStations;
+ll nextIndex, sourceIndex, sinkIndex;
 double consumptionRate, rechargingRate, batteryCapacity;
 
 vector<vector<double>> distancia;
-vector<int> k, p, jL, jR;
+vector<ll> k, p, jL, jR;
 vector<Costumer> costumers;
 vector<RechargingStation> rechargingStations;
 
-int layerAux = 0, sumAux = 0;
+ll layerAux = 0, sumAux = 0;
 
-int roundBattery(double x) {
+ll roundBattery(double x) {
     return round(x)+1;
 }
 
@@ -70,16 +70,16 @@ bool viable(const Node& node){
     if(!hasBattery(node)) return false;
     if(node.layer == numberOfCustomers) return true;
 
-    int i = node.layer + 1;
+    ll i = node.layer + 1;
 
-    for(int v = 2; v <= i; v++) {
+    for(ll v = 2; v <= i; v++) {
         if(!(node.visited & (1ll << (v - 1))) && node.city >= v+k[v]) return false;
     }
     
     return true;
 }
 
-void withoutRechargeStation(Node &node, vector<pair<int,double>> &adjCities, queue<int> &q, Node &previous) {
+void withoutRechargeStation(Node &node, vector<pair<ll,double>> &adjCities, queue<ll> &q, Node &previous) {
     node.batteryLevel = previous.batteryLevel - consumptionRate*distancia[previous.city][node.city];
 
     if(!viable(node)) return;
@@ -87,7 +87,7 @@ void withoutRechargeStation(Node &node, vector<pair<int,double>> &adjCities, que
     if(nodeIndex.find(node) != nodeIndex.end()) {
         adjCities.push_back({nodeIndex[node], distancia[previous.city][node.city]});
     } else {
-        int id = nextIndex++;
+        ll id = nextIndex++;
         nodeIndex[node] = id;
         nodes[id] = node;
         adjCities.push_back({id, distancia[previous.city][node.city]});
@@ -95,59 +95,104 @@ void withoutRechargeStation(Node &node, vector<pair<int,double>> &adjCities, que
     }
 }
 
-void withRechargeStation(Node &node, vector<pair<int,double>> &adjCities, queue<int> &q, Node &previous) {
+void withRechargeStation(Node &node, vector<pair<ll,double>> &adjCities, queue<ll> &q, Node &previous) {
     if(!viable(node)) return;
 
+    vector<pair<Node, double>> comparation;
     for(auto rs : rechargingStations) {
         Node nodeAux = node;
+        double rechargingTime = (batteryCapacity-nodeAux.batteryLevel)*rechargingRate;
         nodeAux.batteryLevel -= consumptionRate*distancia[previous.city][rs.id];
         if(!hasBattery(nodeAux)) continue;
         
         nodeAux.batteryLevel = batteryCapacity;
         nodeAux.batteryLevel -= consumptionRate*distancia[rs.id][nodeAux.city];
         if(!hasBattery(nodeAux)) continue;
+        
+        comparation.push_back({nodeAux, distancia[previous.city][rs.id]+distancia[rs.id][nodeAux.city]+rechargingTime});
+    }
 
-        nodeAux.recharge++;
-    
-        if(nodeIndex.find(nodeAux) != nodeIndex.end()) {
-            adjCities.push_back({nodeIndex[nodeAux], distancia[previous.city][rs.id]+distancia[rs.id][nodeAux.city]});
-        } else {
-            int id = nextIndex++;
-            nodeIndex[nodeAux] = id;
-            nodes[id] = nodeAux;
-            adjCities.push_back({id, distancia[previous.city][rs.id]+distancia[rs.id][nodeAux.city]});
-            q.push(id);
+    for(ll i = 0; i < (ll)comparation.size(); i++) {
+        bool flag = true;
+        for(ll j = 0; j < (ll)comparation.size(); j++) {
+            if(i == j) continue;
+            if(comparation[j].first.batteryLevel < comparation[i].first.batteryLevel && comparation[j].second < comparation[i].second) {
+                flag = false;
+                break;
+            }
+        }
+
+        if(flag) {
+            if(nodeIndex.find(comparation[i].first) != nodeIndex.end()) {
+                adjCities.push_back({nodeIndex[comparation[i].first], comparation[i].second});
+            } else {
+                ll id = nextIndex++;
+                nodeIndex[comparation[i].first] = id;
+                nodes[id] = comparation[i].first;
+                adjCities.push_back({id, comparation[i].second});
+                q.push(id);
+            }
         }
     }
+    
+}
+
+void returnToOrigin(Node node) {
+    bool canReturn = false;
+    double minDist = INF;
+    
+    if(node.batteryLevel - consumptionRate*distancia[node.city][1] >= 0.0) {
+        canReturn = true;
+        minDist = distancia[node.city][1];
+    }
+
+    for(auto rs : rechargingStations) {
+        Node nodeAux = node;
+        double rechargingTime = (batteryCapacity-nodeAux.batteryLevel)*rechargingRate;
+        nodeAux.batteryLevel -= consumptionRate*distancia[node.city][rs.id];
+        if(!hasBattery(nodeAux)) continue;
+        
+        nodeAux.batteryLevel = batteryCapacity;
+        nodeAux.batteryLevel -= consumptionRate*distancia[rs.id][1];
+        if(!hasBattery(nodeAux)) continue;
+        
+        canReturn = true;
+        minDist = min(minDist, distancia[nodeAux.city][rs.id]+distancia[rs.id][1]+rechargingTime);
+    }
+
+    
+    if(canReturn) cout << "1 " << sinkIndex << " " << minDist << endl;
+    else cout << 0 << endl;
+
 }
 
 // indice / numero de adj / adj1 / adj2 / ...
 void tsp()
 {
-    queue<int> nextCitiesQueue;
+    queue<ll> nextCitiesQueue;
     nextCitiesQueue.push(sourceIndex);
 
     while (!nextCitiesQueue.empty()) {
-        int id = nextCitiesQueue.front(); nextCitiesQueue.pop();
+        ll id = nextCitiesQueue.front(); nextCitiesQueue.pop();
         cout << id << " ";
 
         Node l = nodes[id];
 
         if (l.visited == allVisited) {
-            cout << "1 " << sinkIndex << " " << distancia[l.city][1] << endl;
+            returnToOrigin(l);
             continue;
         }
 
-        int i = l.layer + 1;
-        vector<pair<int,double>> adjCities;
+        ll i = l.layer + 1;
+        vector<pair<ll,double>> adjCities;
 
-        for (int j = jL[i]; j <= jR[i]; j++)
+        for (ll j = jL[i]; j <= jR[i]; j++)
         {
             ll bit = 1LL << (j-1);
             if (j != l.city && !(l.visited & bit))
             {
-                set<int> SmenosAux = l.Smenos;
-                set<int> SmaisAux = l.Smais;
+                set<ll> SmenosAux = l.Smenos;
+                set<ll> SmaisAux = l.Smais;
 
                 if (l.city < (i - 1) && l.Smenos.find(i - 1) != l.Smenos.end()) {
                     SmaisAux.erase(l.city);
@@ -169,7 +214,7 @@ void tsp()
 
                 Node nodeAux(i, j, l.visited | bit, SmenosAux, SmaisAux, l.batteryLevel, l.recharge);
                 withoutRechargeStation(nodeAux, adjCities, nextCitiesQueue, l);
-                if(!l.recharge) withRechargeStation(nodeAux, adjCities, nextCitiesQueue, l);
+                withRechargeStation(nodeAux, adjCities, nextCitiesQueue, l);
             }
         }
         
@@ -185,7 +230,7 @@ void tsp()
 void getCostumers() {
     costumers.assign(numberOfCustomers+1, Costumer());
     costumers[0].timeWindowStart = costumers[0].timeWindowEnd = costumers[0].id = -1;
-    for (int i = 1; i <= numberOfCustomers; i++) {
+    for (ll i = 1; i <= numberOfCustomers; i++) {
         cin >> costumers[i].id >> costumers[i].x >> costumers[i].y >> costumers[i].timeWindowStart >> costumers[i].timeWindowEnd;
         costumers[i].id++;
     }
@@ -195,7 +240,7 @@ void getRechargingStations() {
     rechargingStations.resize(numberOfRechargingStations+1);
     rechargingStations[0] = RechargingStation(1, costumers[1].x, costumers[1].y, costumers[1].timeWindowStart, costumers[1].timeWindowEnd);
 
-    for(int i = 1; i <= numberOfRechargingStations; i++) {
+    for(ll i = 1; i <= numberOfRechargingStations; i++) {
         cin >> rechargingStations[i].id >> rechargingStations[i].x >> rechargingStations[i].y >> rechargingStations[i].timeWindowStart >> rechargingStations[i].timeWindowEnd;
         rechargingStations[i].id++;
     }
@@ -203,13 +248,13 @@ void getRechargingStations() {
 
 void getDistances() {
     distancia.assign(numberOfCustomers + numberOfRechargingStations + 1, vector<double>(numberOfCustomers + numberOfRechargingStations + 1, 0));
-    for (int i = 1; i <= numberOfCustomers + numberOfRechargingStations; i++) {
-        for (int j = 1; j <= numberOfCustomers + numberOfRechargingStations; j++) 
+    for (ll i = 1; i <= numberOfCustomers + numberOfRechargingStations; i++) {
+        for (ll j = 1; j <= numberOfCustomers + numberOfRechargingStations; j++) 
             cin >> distancia[i][j];
     }
 }
 
-bool sortMidpoint(const Costumer &a, const Costumer &b) {
+bool sortMidpoll(const Costumer &a, const Costumer &b) {
     return a.timeWindowStart + a.timeWindowEnd < b.timeWindowStart + b.timeWindowEnd;
 }
 
@@ -219,20 +264,20 @@ void getVariableK() {
     jL.assign(numberOfCustomers + 2, numberOfCustomers + 1);
     jR.assign(numberOfCustomers + 2, 0);
 
-    sort(costumers.begin() + 2, costumers.end(), sortMidpoint);
+    sort(costumers.begin() + 2, costumers.end(), sortMidpoll);
 
     vector<vector<double>> distanciaAux = distancia;
-    for(int i = 1; i <= numberOfCustomers; i++) {
-        for(int j = 1; j <= numberOfCustomers; j++) {
+    for(ll i = 1; i <= numberOfCustomers; i++) {
+        for(ll j = 1; j <= numberOfCustomers; j++) {
             distanciaAux[i][j] = distancia[costumers[i].id][costumers[j].id];
         }
     }
     distancia = distanciaAux;
 
-    for(int i = 1; i <= numberOfCustomers; i++) {
+    for(ll i = 1; i <= numberOfCustomers; i++) {
         bool flag = false;
-        int j0 = numberOfCustomers + 1;
-        for(int j = i+1; j <= numberOfCustomers; j++) {
+        ll j0 = numberOfCustomers + 1;
+        for(ll j = i+1; j <= numberOfCustomers; j++) {
             if(!flag && costumers[j].timeWindowStart + distancia[j][i] > costumers[i].timeWindowEnd) {
                 j0 = j;
                 flag = true;
@@ -245,22 +290,22 @@ void getVariableK() {
     }
     k[1] = 1;
 
-    for (int j = 2; j <= numberOfCustomers; j++) {
-        int cnt = 0;
-        for (int l = 1; l < j; l++) {
+    for (ll j = 2; j <= numberOfCustomers; j++) {
+        ll cnt = 0;
+        for (ll l = 1; l < j; l++) {
             if (l + k[l] >= j + 1) cnt++;
         }
         p[j] = cnt;
     }
 
-    for (int i = 1; i <= numberOfCustomers+1; i++) {
-        for (int j = 1; j <= numberOfCustomers; j++) {
+    for (ll i = 1; i <= numberOfCustomers+1; i++) {
+        for (ll j = 1; j <= numberOfCustomers; j++) {
             if (j + k[j] >= i + 1) { jL[i] = j; break; }
         }
     }
 
-    for (int i = 1; i <= numberOfCustomers+1; i++) {
-        for (int j = numberOfCustomers; j >= 1; j--) {
+    for (ll i = 1; i <= numberOfCustomers+1; i++) {
+        for (ll j = numberOfCustomers; j >= 1; j--) {
             if (p[j] >= j - i) { jR[i] = j; break; }
         }
     }
@@ -286,6 +331,8 @@ signed main()
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    auto start = high_resolution_clock::now();
+
     cin >> numberOfCustomers;
     cin >> numberOfRechargingStations;
     cin >> batteryCapacity;
@@ -304,16 +351,15 @@ signed main()
 
     cout << 0 << endl;
 
-    // numero / layer / cidade / visitados / s-.size() / s- / s+.size() / s+ / NAO SEI / Nível da bateria
     for (auto [i, node] : nodes) {
         cout << i << " " << node.layer << " " << node.city << " " << node.visited << " " << costumers[node.city].id << " " << node.batteryLevel << " ";
         
         cout << node.Smenos.size() << " ";
-        for (int s : node.Smenos)
+        for (ll s : node.Smenos)
             cout << s << " ";
 
         cout << node.Smais.size() << " ";
-        for (int s : node.Smais)
+        for (ll s : node.Smais)
             cout << s << " ";
 
         cout << endl;
@@ -321,10 +367,14 @@ signed main()
     cout << 0 << endl;
 
     cout << numberOfCustomers << endl;
-    for (int i = 1; i <= numberOfCustomers; i++) {
+    for (ll i = 1; i <= numberOfCustomers; i++) {
         cout << costumers[i].timeWindowStart << " " << costumers[i].timeWindowEnd << endl;
     }
-    
+
+    auto end = high_resolution_clock::now();
+
+    auto duration = duration_cast<milliseconds>(end - start); 
+    cout << "Tempo: " << duration.count() << " ms\n";
 
     return 0;
 }

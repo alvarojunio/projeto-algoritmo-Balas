@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+using namespace std::chrono;
 
 const long long INF = 1e9;
 
@@ -46,6 +47,7 @@ map<Node, int> nodeIndex;
 
 vector<vector<pair<double,int>>> adj;
 vector<TimeWindow> timeWindows;
+vector<int> k,jL,jR;
 
 vector<double> dijkstra(int s, vector<int>& parent) {
     int n = adj.size();
@@ -85,6 +87,7 @@ vector<int> getPath(int target, const vector<int>& parent) {
 }
 
 signed main() {
+    auto start = high_resolution_clock::now();
     int ind, numAdj, adjNode, numberOfCities;
     double weight;
 
@@ -129,8 +132,15 @@ signed main() {
 
     cin >> numberOfCities;
     timeWindows.assign(numberOfCities+1, TimeWindow());
+    k.assign(numberOfCities+1, 0);
+    jL.assign(numberOfCities+1, 0);
+    jR.assign(numberOfCities+1, 0);
     for(int i = 1; i <= numberOfCities; i++) {
         cin >> timeWindows[i].a >> timeWindows[i].b >> timeWindows[i].ind;
+    }
+
+    for(int i = 1; i <= numberOfCities; i++) {
+        cin >> k[i] >> jL[i] >> jR[i];
     }
 
     vector<int> parent;
@@ -151,6 +161,16 @@ signed main() {
     cout << "Distâncias: " << endl;
     for (int v : path) cout << dist[v] << " ";
     cout << endl;
+
+    cout << "K's: " << endl;
+    for(int i = 1; i <= numberOfCities; i++) {
+        cout << k[i] << " ";
+    }
+    cout << endl;
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start); 
+    cout << "Tempo: " << duration.count() << " ms\n";
 
     return 0;
 }

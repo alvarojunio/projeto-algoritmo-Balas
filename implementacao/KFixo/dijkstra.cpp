@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+using namespace std::chrono;
 
 const long long INF = 1e9;
 const int maxE = 100000;
@@ -69,14 +70,16 @@ vector<int> getPath(int target, const vector<int>& parent) {
 }
 
 signed main() {
-    adj.resize(50000);
+    auto start = high_resolution_clock::now();
+    adj.resize(1);
     int ind, numAdj, adjNode;
     double weight;
 
     while(true) {
         cin >> ind;
         if(ind == 0) break;
-
+        adj.resize(ind+1);
+        
         cin >> numAdj;
         for(int i = 0; i < numAdj; i++) {
             cin >> adjNode >> weight;
@@ -122,6 +125,10 @@ signed main() {
     cout << "Distâncias: " << endl;
     for (int v : path) cout << dist[v] << " ";
     cout << endl;
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start); 
+    cout << "Tempo: " << duration.count() << " ms\n";
 
     return 0;
 }

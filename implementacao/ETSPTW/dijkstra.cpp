@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+using namespace std::chrono;
 
 const long long INF = 1e9;
 
@@ -67,9 +68,8 @@ vector<double> dijkstra(int s, vector<int>& parent) {
 
         for (auto [len, next] : adj[v]) {
             Node nodeAux = nodes[next];
-            // double newDist = max((double)timeWindows[nodeAux.city].a, dist + len);
-            // if(newDist > timeWindows[nodeAux.city].b*1.0) continue;
-            double newDist = dist + len;
+            double newDist = max((double)timeWindows[nodeAux.city].a, dist + len);
+            if(newDist > timeWindows[nodeAux.city].b*1.0) continue;
             if (newDist < d[next]) {
                 d[next] = newDist;
                 parent[next] = v;
@@ -89,6 +89,7 @@ vector<int> getPath(int target, const vector<int>& parent) {
 }
 
 signed main() {
+    auto start = high_resolution_clock::now();
     int ind, numAdj, adjNode, numberOfCities;
     double weight;
 
@@ -159,6 +160,10 @@ signed main() {
     cout << "Distâncias: " << endl;
     for (int v : path) cout << dist[v] << '/' << nodes[v].batteryLevel << " ";
     cout << endl;
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start); 
+    cout << "Tempo: " << duration.count() << " ms\n";
 
     return 0;
 }
