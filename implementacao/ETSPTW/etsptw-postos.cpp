@@ -12,18 +12,18 @@ struct Node
     ll visited;
     set<ll> Smenos, Smais;
     double batteryLevel;
-    ll recharge;
+    ll rechargingStationId;
 
     Node() {};
-    Node(ll layer, ll city, ll visited, const set<ll> &Smenos, const set<ll> &Smais, double batteryLevel, ll recharge) : layer(layer), city(city), visited(visited), Smenos(Smenos), Smais(Smais), batteryLevel(batteryLevel), recharge(recharge) {};
+    Node(ll layer, ll city, ll visited, const set<ll> &Smenos, const set<ll> &Smais, double batteryLevel, ll rechargingStationId) : layer(layer), city(city), visited(visited), Smenos(Smenos), Smais(Smais), batteryLevel(batteryLevel), rechargingStationId(rechargingStationId) {};
 
     bool operator==(const Node &other) const {
         return (layer == other.layer && city == other.city && visited == other.visited && 
-                Smenos == other.Smenos && Smais == other.Smais && batteryLevel == other.batteryLevel, recharge == other.recharge);
+                Smenos == other.Smenos && Smais == other.Smais && batteryLevel == other.batteryLevel, rechargingStationId == other.rechargingStationId);
     }
 
     bool operator<(const Node &other) const {
-        return tie(layer, city, visited, Smenos, Smais, batteryLevel, recharge) < tie(other.layer, other.city, other.visited, other.Smenos, other.Smais, other.batteryLevel, other.recharge);
+        return tie(layer, city, visited, Smenos, Smais, batteryLevel, rechargingStationId) < tie(other.layer, other.city, other.visited, other.Smenos, other.Smais, other.batteryLevel, other.rechargingStationId);
     }
 };
 
@@ -101,6 +101,7 @@ void withRechargeStation(Node &node, vector<pair<ll,double>> &adjCities, queue<l
     vector<pair<Node, double>> comparation;
     for(auto rs : rechargingStations) {
         Node nodeAux = node;
+        nodeAux.rechargingStationId = rs.id;
         nodeAux.batteryLevel -= consumptionRate*distancia[previous.city][rs.id];
         if(!hasBattery(nodeAux)) continue;
         
@@ -140,6 +141,7 @@ void withRechargeStation(Node &node, vector<pair<ll,double>> &adjCities, queue<l
 void returnToOrigin(Node node) {
     bool canReturn = false;
     double minDist = INF;
+    int rechargingIdReturn = -1;
     
     if(node.batteryLevel - consumptionRate*distancia[node.city][1] >= 0.0) {
         canReturn = true;
@@ -157,11 +159,14 @@ void returnToOrigin(Node node) {
         if(!hasBattery(nodeAux)) continue;
         
         canReturn = true;
-        minDist = min(minDist, distancia[nodeAux.city][rs.id]+distancia[rs.id][1]+rechargingTime);
+        if(minDist > distancia[nodeAux.city][rs.id]+distancia[rs.id][1]+rechargingTime){
+            minDist = distancia[nodeAux.city][rs.id]+distancia[rs.id][1]+rechargingTime;
+            rechargingIdReturn = rs.id;
+        }
     }
 
     
-    if(canReturn) cout << "1 " << sinkIndex << " " << minDist << endl;
+    if(canReturn) cout << "1 " << sinkIndex << " " << minDist << " " << rechargingIdReturn << endl;
     else cout << 0 << endl;
 
 }
@@ -212,7 +217,7 @@ void tsp()
                     SmaisAux.insert(i - 1);
                 }
 
-                Node nodeAux(i, j, l.visited | bit, SmenosAux, SmaisAux, l.batteryLevel, l.recharge);
+                Node nodeAux(i, j, l.visited | bit, SmenosAux, SmaisAux, l.batteryLevel, -1);
                 withoutRechargeStation(nodeAux, adjCities, nextCitiesQueue, l);
                 withRechargeStation(nodeAux, adjCities, nextCitiesQueue, l);
             }
@@ -254,7 +259,7 @@ void getDistances() {
     }
 }
 
-bool sortMidpoll(const Costumer &a, const Costumer &b) {
+bool sortMidpoint(const Costumer &a, const Costumer &b) {
     return a.timeWindowStart + a.timeWindowEnd < b.timeWindowStart + b.timeWindowEnd;
 }
 
@@ -264,12 +269,19 @@ void getVariableK() {
     jL.assign(numberOfCustomers + 2, numberOfCustomers + 1);
     jR.assign(numberOfCustomers + 2, 0);
 
-    sort(costumers.begin() + 2, costumers.end(), sortMidpoll);
+    sort(costumers.begin() + 2, costumers.end(), sortMidpoint);
 
     vector<vector<double>> distanciaAux = distancia;
     for(ll i = 1; i <= numberOfCustomers; i++) {
         for(ll j = 1; j <= numberOfCustomers; j++) {
             distanciaAux[i][j] = distancia[costumers[i].id][costumers[j].id];
+        }
+    }
+
+    for(int i = 1; i <= numberOfCustomers; i++) {
+        for(int j = numberOfCustomers+1; j <= numberOfCustomers+numberOfRechargingStations; j++) {
+            distanciaAux[i][j] = distancia[costumers[i].id][j];
+            distanciaAux[j][i] = distancia[j][costumers[i].id];
         }
     }
     distancia = distanciaAux;
@@ -319,10 +331,10 @@ void initializeNodes() {
     sinkIndex = 2;
     nextIndex = 3;
 
-    nodes[sourceIndex] = Node(1,1,1LL, {}, {}, batteryCapacity, 0);
+    nodes[sourceIndex] = Node(1,1,1LL, {}, {}, batteryCapacity, -1);
     nodeIndex[nodes[sourceIndex]] = sourceIndex;
 
-    nodes[sinkIndex] = Node(numberOfCustomers+1,1,allVisited, {}, {}, batteryCapacity, 0);
+    nodes[sinkIndex] = Node(numberOfCustomers+1,1,allVisited, {}, {}, batteryCapacity, -1);
     nodeIndex[nodes[sinkIndex]] = sinkIndex;
 }
 
@@ -352,7 +364,7 @@ signed main()
     cout << 0 << endl;
 
     for (auto [i, node] : nodes) {
-        cout << i << " " << node.layer << " " << node.city << " " << node.visited << " " << costumers[node.city].id << " " << node.batteryLevel << " ";
+        cout << i << " " << node.layer << " " << node.city << " " << node.visited << " " << costumers[node.city].id << " " << node.batteryLevel << " " << node.rechargingStationId << " ";
         
         cout << node.Smenos.size() << " ";
         for (ll s : node.Smenos)
@@ -368,7 +380,15 @@ signed main()
 
     cout << numberOfCustomers << endl;
     for (ll i = 1; i <= numberOfCustomers; i++) {
-        cout << costumers[i].timeWindowStart << " " << costumers[i].timeWindowEnd << endl;
+        cout << k[i] << " " << costumers[i].timeWindowStart << " " << costumers[i].timeWindowEnd << endl;
+    }
+
+    cout << distancia.size() << endl;
+    for(int i = 0; i < distancia.size(); i++) {
+        for(int j = 0; j < distancia.size(); j++) {
+            cout << distancia[i][j] << " ";
+        }
+        cout << endl;
     }
 
     auto end = high_resolution_clock::now();
