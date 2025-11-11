@@ -13,7 +13,7 @@ Clonar repositório (necessário criar chave pública-privada para usar ssh - ve
 
 Subir atualizações:
 - $ git commit -a
-- $ git push
+- $ git push origin main
 
 Adicionar novos arquivos:
 - $ git add < new - file >
